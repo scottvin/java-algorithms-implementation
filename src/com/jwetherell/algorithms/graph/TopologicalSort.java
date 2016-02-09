@@ -12,9 +12,9 @@ import com.jwetherell.algorithms.data_structures.Graph;
  * 
  * @author Justin Wetherell <phishman3579@gmail.com>
  */
-public class TopologicalSort {
+public class TopologicalSort<T extends Comparable<T>> {
 
-    private TopologicalSort() { }
+	public TopologicalSort() { }
 
     /**
      * Performs a topological sort on a directed graph. Returns NULL if a cycle is detected.
@@ -24,7 +24,7 @@ public class TopologicalSort {
      * @param graph
      * @return Sorted List of Vertices or NULL if graph has a cycle
      */
-    public static final List<Graph.Vertex<Integer>> sort(Graph<Integer> graph) {
+    public final List<Graph.Vertex<T>> sort(Graph<T> graph) {
         if (graph == null)
             throw new IllegalArgumentException("Graph is NULL.");
 
@@ -32,30 +32,30 @@ public class TopologicalSort {
             throw new IllegalArgumentException("Cannot perform a topological sort on a non-directed graph. graph type = "+graph.getType());
 
         // clone to prevent changes the graph parameter's state
-        final Graph<Integer> clone = new Graph<Integer>(graph);
-        final List<Graph.Vertex<Integer>> sorted = new ArrayList<Graph.Vertex<Integer>>();
-        final List<Graph.Vertex<Integer>> noOutgoing = new ArrayList<Graph.Vertex<Integer>>();
+        final Graph<T> clone = new Graph<T>(graph);
+        final List<Graph.Vertex<T>> sorted = new ArrayList<Graph.Vertex<T>>();
+        final List<Graph.Vertex<T>> noOutgoing = new ArrayList<Graph.Vertex<T>>();
 
-        final List<Graph.Edge<Integer>> edges = new ArrayList<Graph.Edge<Integer>>();
+        final List<Graph.Edge<T>> edges = new ArrayList<Graph.Edge<T>>();
         edges.addAll(clone.getEdges());
 
         // Find all the vertices which have no outgoing edges
-        for (Graph.Vertex<Integer> v : clone.getVertices()) {
+        for (Graph.Vertex<T> v : clone.getVertices()) {
             if (v.getEdges().size() == 0)
                 noOutgoing.add(v);
         }
 
         // While we still have vertices which have no outgoing edges 
         while (noOutgoing.size() > 0) {
-            final Graph.Vertex<Integer> current = noOutgoing.remove(0);
+            final Graph.Vertex<T> current = noOutgoing.remove(0);
             sorted.add(current);
 
             // Go thru each edge, if it goes to the current vertex then remove it.
             int i = 0;
             while (i < edges.size()) {
-                final Graph.Edge<Integer> e = edges.get(i);
-                final Graph.Vertex<Integer> from = e.getFromVertex();
-                final Graph.Vertex<Integer> to = e.getToVertex();
+                final Graph.Edge<T> e = edges.get(i);
+                final Graph.Vertex<T> from = e.getFromVertex();
+                final Graph.Vertex<T> to = e.getToVertex();
                 // Found an edge to the current vertex, remove it.
                 if (to.equals(current)) {
                     edges.remove(e);

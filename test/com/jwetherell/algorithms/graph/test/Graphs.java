@@ -373,7 +373,7 @@ public class Graphs {
         final Graph.Vertex<Integer> start = undirected.v1;
         final Graph.Vertex<Integer> end = undirected.v5;
         {   // UNDIRECTED GRAPH
-            final Map<Graph.Vertex<Integer>, Graph.CostPathPair<Integer>> map1 = Dijkstra.getShortestPaths(undirected.graph, start);
+            final Map<Graph.Vertex<Integer>, Graph.CostPathPair<Integer>> map1 = new Dijkstra<Integer>().getShortestPaths(undirected.graph, start);
 
             // Compare results
             for (Graph.Vertex<Integer> v : map1.keySet()) {
@@ -382,7 +382,7 @@ public class Graphs {
                 assertTrue("Dijstra's shortest path error. path1="+path1+" path2="+path2, path1.equals(path2));
             }
 
-            final Graph.CostPathPair<Integer> pair1 = Dijkstra.getShortestPath(undirected.graph, start, end);
+            final Graph.CostPathPair<Integer> pair1 = new Dijkstra<Integer>().getShortestPath(undirected.graph, start, end);
             assertTrue("No path from " + start.getValue() + " to " + end.getValue(), (pair1 != null));
 
             assertTrue("Dijstra's shortest path error. pair="+pair1+" pair="+getIdealUndirectedPathPair(undirected), pair1.equals(getIdealUndirectedPathPair(undirected)));
@@ -395,7 +395,7 @@ public class Graphs {
         final Graph.Vertex<Integer> start = undirected.v1;
         final Graph.Vertex<Integer> end = undirected.v5;
         {
-            final Map<Graph.Vertex<Integer>, Graph.CostPathPair<Integer>> map2 = BellmanFord.getShortestPaths(undirected.graph, start);
+            final Map<Graph.Vertex<Integer>, Graph.CostPathPair<Integer>> map2 = new BellmanFord<Integer>().getShortestPaths(undirected.graph, start);
 
             // Compare results
             for (Graph.Vertex<Integer> v : map2.keySet()) {
@@ -404,7 +404,7 @@ public class Graphs {
                 assertTrue("Bellman-Ford's shortest path error. path1="+path1+" path2="+path2, path1.equals(path2));
             }
 
-            final Graph.CostPathPair<Integer> pair2 = BellmanFord.getShortestPath(undirected.graph, start, end);
+            final Graph.CostPathPair<Integer> pair2 = new BellmanFord<Integer>().getShortestPath(undirected.graph, start, end);
             assertTrue("Bellman-Ford's shortest path error. pair="+pair2+" result="+getIdealUndirectedPathPair(undirected), pair2.equals(getIdealUndirectedPathPair(undirected)));
         }
     }
@@ -415,7 +415,7 @@ public class Graphs {
 
         Graph.Vertex<Integer> start = undirected.v1;
         {
-            final Graph.CostPathPair<Integer> resultMST = Prim.getMinimumSpanningTree(undirected.graph, start);
+            final Graph.CostPathPair<Integer> resultMST = new Prim<Integer>().getMinimumSpanningTree(undirected.graph, start);
             {
                 // Ideal MST
                 final int cost = 35;
@@ -461,7 +461,7 @@ public class Graphs {
 
             start = cv1;
 
-            final Graph.CostPathPair<Integer> pair4 = Prim.getMinimumSpanningTree(cyclicUndirected, start);
+            final Graph.CostPathPair<Integer> pair4 = new Prim<Integer>().getMinimumSpanningTree(cyclicUndirected, start);
             {
                 // Ideal MST
                 final int cost = 7;
@@ -482,7 +482,7 @@ public class Graphs {
         final DirectedGraph directed = new DirectedGraph();
         final Graph.Vertex<Integer> start = directed.v1;
         final Graph.Vertex<Integer> end = directed.v5;
-        final Map<Graph.Vertex<Integer>, Graph.CostPathPair<Integer>> map1 = Dijkstra.getShortestPaths(directed.graph, start);
+        final Map<Graph.Vertex<Integer>, Graph.CostPathPair<Integer>> map1 = new Dijkstra<Integer>().getShortestPaths(directed.graph, start);
 
         // Compare results
         for (Graph.Vertex<Integer> v : map1.keySet()) {
@@ -491,7 +491,7 @@ public class Graphs {
             assertTrue("Dijstra's shortest path error. path1="+path1+" path2="+path2, path1.equals(path2));
         }
 
-        final Graph.CostPathPair<Integer> pair1 = Dijkstra.getShortestPath(directed.graph, start, end);
+        final Graph.CostPathPair<Integer> pair1 = new Dijkstra<Integer>().getShortestPath(directed.graph, start, end);
         assertTrue("No path from "+start.getValue()+" to "+end.getValue(), (pair1!=null));
 
         // Compare pair
@@ -504,7 +504,7 @@ public class Graphs {
         final Graph.Vertex<Integer> start = directed.v1;
         final Graph.Vertex<Integer> end = directed.v5;
 
-        final Map<Graph.Vertex<Integer>, Graph.CostPathPair<Integer>> map2 = BellmanFord.getShortestPaths(directed.graph, start);
+        final Map<Graph.Vertex<Integer>, Graph.CostPathPair<Integer>> map2 = new BellmanFord<Integer>().getShortestPaths(directed.graph, start);
 
         // Compare results
         for (Graph.Vertex<Integer> v : map2.keySet()) {
@@ -513,7 +513,7 @@ public class Graphs {
             assertTrue("Bellman-Ford's shortest path error. path1="+path1+" path2="+path2, path1.equals(path2));
         }
 
-        final Graph.CostPathPair<Integer> pair2 = BellmanFord.getShortestPath(directed.graph, start, end);
+        final Graph.CostPathPair<Integer> pair2 = new BellmanFord<Integer>().getShortestPath(directed.graph, start, end);
         assertTrue("No path from "+start.getValue()+" to "+end.getValue(), pair2!=null);
 
         // Compare pair
@@ -526,7 +526,7 @@ public class Graphs {
         {   // DIRECTED GRAPH (WITH NEGATIVE WEIGHTS)
             final Graph.Vertex<Integer> start = directedWithNegWeights.v1;
             final Graph.Vertex<Integer> end = directedWithNegWeights.v3;
-            final Map<Graph.Vertex<Integer>, Graph.CostPathPair<Integer>> map1 = BellmanFord.getShortestPaths(directedWithNegWeights.graph, start);
+            final Map<Graph.Vertex<Integer>, Graph.CostPathPair<Integer>> map1 = new BellmanFord<Integer>().getShortestPaths(directedWithNegWeights.graph, start);
 
             // Compare results
             for (Graph.Vertex<Integer> v : map1.keySet()) {
@@ -535,7 +535,7 @@ public class Graphs {
                 assertTrue("Bellman-Ford's shortest path error. path1="+path1+" path2="+path2, path1.equals(path2));
             }
 
-            final Graph.CostPathPair<Integer> pair1 = BellmanFord.getShortestPath(directedWithNegWeights.graph, start, end);
+            final Graph.CostPathPair<Integer> pair1 = new BellmanFord<Integer>().getShortestPath(directedWithNegWeights.graph, start, end);
             assertTrue("No path from " + start.getValue() + " to " + end.getValue(), pair1 != null);
 
             // Compare pair
@@ -547,7 +547,7 @@ public class Graphs {
     public void testJohnonsonsAllPairsShortestPathOnDirecteWithNegWeights() {
         final DirectedWithNegativeWeights directedWithNegWeights = new DirectedWithNegativeWeights();
         {
-            final Map<Vertex<Integer>, Map<Vertex<Integer>, List<Edge<Integer>>>> path = Johnson.getAllPairsShortestPaths(directedWithNegWeights.graph);
+            final Map<Vertex<Integer>, Map<Vertex<Integer>, List<Edge<Integer>>>> path = new Johnson<Integer>().getAllPairsShortestPaths(directedWithNegWeights.graph);
             assertTrue("Directed graph contains a negative weight cycle.", (path != null));
 
             final Map<Vertex<Integer>, Map<Vertex<Integer>, List<Edge<Integer>>>> result = new HashMap<Vertex<Integer>, Map<Vertex<Integer>, List<Edge<Integer>>>>();
@@ -649,7 +649,7 @@ public class Graphs {
     public void testFloydWarshallonDirectedWithNegWeights() {
         final DirectedWithNegativeWeights directedWithNegWeights = new DirectedWithNegativeWeights();
         {
-            final Map<Vertex<Integer>, Map<Vertex<Integer>, Integer>> pathWeights = FloydWarshall.getAllPairsShortestPaths(directedWithNegWeights.graph);  
+            final Map<Vertex<Integer>, Map<Vertex<Integer>, Integer>> pathWeights = new FloydWarshall<Integer>().getAllPairsShortestPaths(directedWithNegWeights.graph);  
             final Map<Vertex<Integer>, Map<Vertex<Integer>, Integer>> result = new HashMap<Vertex<Integer>, Map<Vertex<Integer>, Integer>>();
             {
                 // Ideal weights
@@ -758,7 +758,7 @@ public class Graphs {
 
             final Graph<Integer> undirectedWithCycle = new Graph<Integer>(cycledVerticies, cycledEdges);
 
-            boolean result = CycleDetection.detect(undirectedWithCycle);
+            boolean result = new CycleDetection<Integer>().detect(undirectedWithCycle);
             assertTrue("Cycle detection error.", result);
 
             final List<Vertex<Integer>> verticies = new ArrayList<Vertex<Integer>>();
@@ -789,7 +789,7 @@ public class Graphs {
 
             final Graph<Integer> undirectedWithoutCycle = new Graph<Integer>(verticies, edges);
 
-            result = CycleDetection.detect(undirectedWithoutCycle);
+            result = new CycleDetection<Integer>().detect(undirectedWithoutCycle);
             assertFalse("Cycle detection error.", result);
         }
     }
@@ -827,7 +827,7 @@ public class Graphs {
 
             final Graph<Integer> digraph = new Graph<Integer>(Graph.TYPE.DIRECTED, verticies, edges);
 
-            final List<Graph.Vertex<Integer>> results1 = TopologicalSort.sort(digraph);
+            final List<Graph.Vertex<Integer>> results1 = new TopologicalSort<Integer>().sort(digraph);
             assertTrue("Topological sort error. results="+results1, results1.size()!=0);
 
             final List<Graph.Vertex<Integer>> results2 = new ArrayList<Graph.Vertex<Integer>>(results1.size());

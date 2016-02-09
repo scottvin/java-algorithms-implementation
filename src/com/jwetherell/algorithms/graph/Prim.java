@@ -16,11 +16,11 @@ import com.jwetherell.algorithms.data_structures.Graph;
  * 
  * @author Justin Wetherell <phishman3579@gmail.com>
  */
-public class Prim {
+public class Prim<T extends Comparable<T>> {
 
-    private Prim() { }
+	public Prim() { }
 
-    public static Graph.CostPathPair<Integer> getMinimumSpanningTree(Graph<Integer> graph, Graph.Vertex<Integer> start) {
+    public Graph.CostPathPair<T> getMinimumSpanningTree(Graph<T> graph, Graph.Vertex<T> start) {
         if (graph == null)
             throw (new NullPointerException("Graph must be non-NULL."));
 
@@ -30,23 +30,23 @@ public class Prim {
 
         int cost = 0;
 
-        final Set<Graph.Vertex<Integer>> unvisited = new HashSet<Graph.Vertex<Integer>>();
+        final Set<Graph.Vertex<T>> unvisited = new HashSet<Graph.Vertex<T>>();
         unvisited.addAll(graph.getVertices());
         unvisited.remove(start); // O(1)
 
-        final List<Graph.Edge<Integer>> path = new ArrayList<Graph.Edge<Integer>>();
-        final Queue<Graph.Edge<Integer>> edgesAvailable = new PriorityQueue<Graph.Edge<Integer>>();
+        final List<Graph.Edge<T>> path = new ArrayList<Graph.Edge<T>>();
+        final Queue<Graph.Edge<T>> edgesAvailable = new PriorityQueue<Graph.Edge<T>>();
 
-        Graph.Vertex<Integer> vertex = start;
+        Graph.Vertex<T> vertex = start;
         while (!unvisited.isEmpty()) {
             // Add all edges to unvisited vertices
-            for (Graph.Edge<Integer> e : vertex.getEdges()) {
+            for (Graph.Edge<T> e : vertex.getEdges()) {
                 if (unvisited.contains(e.getToVertex()))
                     edgesAvailable.add(e);
             }
 
             // Remove the lowest cost edge
-            final Graph.Edge<Integer> e = edgesAvailable.remove();
+            final Graph.Edge<T> e = edgesAvailable.remove();
             cost += e.getCost();
             path.add(e); // O(1)
 
@@ -54,6 +54,6 @@ public class Prim {
             unvisited.remove(vertex); // O(1)
         }
 
-        return (new Graph.CostPathPair<Integer>(cost, path));
+        return (new Graph.CostPathPair<T>(cost, path));
     }
 }

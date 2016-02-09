@@ -18,27 +18,27 @@ import com.jwetherell.algorithms.data_structures.Graph;
  * 
  * @author Justin Wetherell <phishman3579@gmail.com>
  */
-public class Dijkstra {
+public class Dijkstra<T extends Comparable<T>> {
 
-    private Dijkstra() { }
+	public Dijkstra() { }
 
-    public static Map<Graph.Vertex<Integer>, Graph.CostPathPair<Integer>> getShortestPaths(Graph<Integer> graph, Graph.Vertex<Integer> start) {
-        final Map<Graph.Vertex<Integer>, List<Graph.Edge<Integer>>> paths = new HashMap<Graph.Vertex<Integer>, List<Graph.Edge<Integer>>>();
-        final Map<Graph.Vertex<Integer>, Graph.CostVertexPair<Integer>> costs = new HashMap<Graph.Vertex<Integer>, Graph.CostVertexPair<Integer>>();
+    public Map<Graph.Vertex<T>, Graph.CostPathPair<T>> getShortestPaths(Graph<T> graph, Graph.Vertex<T> start) {
+        final Map<Graph.Vertex<T>, List<Graph.Edge<T>>> paths = new HashMap<Graph.Vertex<T>, List<Graph.Edge<T>>>();
+        final Map<Graph.Vertex<T>, Graph.CostVertexPair<T>> costs = new HashMap<Graph.Vertex<T>, Graph.CostVertexPair<T>>();
 
         getShortestPath(graph, start, null, paths, costs);
 
-        final Map<Graph.Vertex<Integer>, Graph.CostPathPair<Integer>> map = new HashMap<Graph.Vertex<Integer>, Graph.CostPathPair<Integer>>();
-        for (Graph.CostVertexPair<Integer> pair : costs.values()) {
+        final Map<Graph.Vertex<T>, Graph.CostPathPair<T>> map = new HashMap<Graph.Vertex<T>, Graph.CostPathPair<T>>();
+        for (Graph.CostVertexPair<T> pair : costs.values()) {
             int cost = pair.getCost();
-            Graph.Vertex<Integer> vertex = pair.getVertex();
-            List<Graph.Edge<Integer>> path = paths.get(vertex);
-            map.put(vertex, new Graph.CostPathPair<Integer>(cost, path));
+            Graph.Vertex<T> vertex = pair.getVertex();
+            List<Graph.Edge<T>> path = paths.get(vertex);
+            map.put(vertex, new Graph.CostPathPair<T>(cost, path));
         }
         return map;
     }
 
-    public static Graph.CostPathPair<Integer> getShortestPath(Graph<Integer> graph, Graph.Vertex<Integer> start, Graph.Vertex<Integer> end) {
+    public Graph.CostPathPair<T> getShortestPath(Graph<T> graph, Graph.Vertex<T> start, Graph.Vertex<T> end) {
         if (graph == null)
             throw (new NullPointerException("Graph must be non-NULL."));
 
@@ -47,15 +47,15 @@ public class Dijkstra {
         if (hasNegativeEdge)
             throw (new IllegalArgumentException("Negative cost Edges are not allowed."));
 
-        final Map<Graph.Vertex<Integer>, List<Graph.Edge<Integer>>> paths = new HashMap<Graph.Vertex<Integer>, List<Graph.Edge<Integer>>>();
-        final Map<Graph.Vertex<Integer>, Graph.CostVertexPair<Integer>> costs = new HashMap<Graph.Vertex<Integer>, Graph.CostVertexPair<Integer>>();
+        final Map<Graph.Vertex<T>, List<Graph.Edge<T>>> paths = new HashMap<Graph.Vertex<T>, List<Graph.Edge<T>>>();
+        final Map<Graph.Vertex<T>, Graph.CostVertexPair<T>> costs = new HashMap<Graph.Vertex<T>, Graph.CostVertexPair<T>>();
         return getShortestPath(graph, start, end, paths, costs);
     }
 
-    private static Graph.CostPathPair<Integer> getShortestPath(Graph<Integer> graph, 
-                                                              Graph.Vertex<Integer> start, Graph.Vertex<Integer> end,
-                                                              Map<Graph.Vertex<Integer>, List<Graph.Edge<Integer>>> paths,
-                                                              Map<Graph.Vertex<Integer>, Graph.CostVertexPair<Integer>> costs) {
+    private Graph.CostPathPair<T> getShortestPath(Graph<T> graph, 
+                                                              Graph.Vertex<T> start, Graph.Vertex<T> end,
+                                                              Map<Graph.Vertex<T>, List<Graph.Edge<T>>> paths,
+                                                              Map<Graph.Vertex<T>, Graph.CostVertexPair<T>> costs) {
         if (graph == null)
             throw (new NullPointerException("Graph must be non-NULL."));
         if (start == null)
@@ -66,27 +66,27 @@ public class Dijkstra {
         if (hasNegativeEdge)
             throw (new IllegalArgumentException("Negative cost Edges are not allowed."));
 
-        for (Graph.Vertex<Integer> v : graph.getVertices())
-            paths.put(v, new ArrayList<Graph.Edge<Integer>>());
+        for (Graph.Vertex<T> v : graph.getVertices())
+            paths.put(v, new ArrayList<Graph.Edge<T>>());
 
-        for (Graph.Vertex<Integer> v : graph.getVertices()) {
+        for (Graph.Vertex<T> v : graph.getVertices()) {
             if (v.equals(start))
-                costs.put(v, new Graph.CostVertexPair<Integer>(0, v));
+                costs.put(v, new Graph.CostVertexPair<T>(0, v));
             else
-                costs.put(v, new Graph.CostVertexPair<Integer>(Integer.MAX_VALUE, v));
+                costs.put(v, new Graph.CostVertexPair<T>(Integer.MAX_VALUE, v));
         }
 
-        final Queue<Graph.CostVertexPair<Integer>> unvisited = new PriorityQueue<Graph.CostVertexPair<Integer>>();
+        final Queue<Graph.CostVertexPair<T>> unvisited = new PriorityQueue<Graph.CostVertexPair<T>>();
         unvisited.add(costs.get(start));
 
         while (!unvisited.isEmpty()) {
-            final Graph.CostVertexPair<Integer> pair = unvisited.remove();
-            final Graph.Vertex<Integer> vertex = pair.getVertex();
+            final Graph.CostVertexPair<T> pair = unvisited.remove();
+            final Graph.Vertex<T> vertex = pair.getVertex();
 
             // Compute costs from current vertex to all reachable vertices which haven't been visited
-            for (Graph.Edge<Integer> e : vertex.getEdges()) {
-                final Graph.CostVertexPair<Integer> toPair = costs.get(e.getToVertex()); // O(1)
-                final Graph.CostVertexPair<Integer> lowestCostToThisVertex = costs.get(vertex); // O(1)
+            for (Graph.Edge<T> e : vertex.getEdges()) {
+                final Graph.CostVertexPair<T> toPair = costs.get(e.getToVertex()); // O(1)
+                final Graph.CostVertexPair<T> lowestCostToThisVertex = costs.get(vertex); // O(1)
                 final int cost = lowestCostToThisVertex.getCost() + e.getCost();
                 if (toPair.getCost() == Integer.MAX_VALUE) {
                     // Haven't seen this vertex yet
@@ -97,7 +97,7 @@ public class Dijkstra {
                     unvisited.add(toPair); // O(log n)
 
                     // Update the paths
-                    List<Graph.Edge<Integer>> set = paths.get(e.getToVertex()); // O(log n)
+                    List<Graph.Edge<T>> set = paths.get(e.getToVertex()); // O(log n)
                     set.addAll(paths.get(e.getFromVertex())); // O(log n)
                     set.add(e);
                 } else if (cost < toPair.getCost()) {
@@ -109,7 +109,7 @@ public class Dijkstra {
                     unvisited.add(toPair); // O(log n)
 
                     // Update the paths
-                    List<Graph.Edge<Integer>> set = paths.get(e.getToVertex()); // O(log n)
+                    List<Graph.Edge<T>> set = paths.get(e.getToVertex()); // O(log n)
                     set.clear();
                     set.addAll(paths.get(e.getFromVertex())); // O(log n)
                     set.add(e);
@@ -124,16 +124,16 @@ public class Dijkstra {
         }
 
         if (end != null) {
-            final Graph.CostVertexPair<Integer> pair = costs.get(end);
-            final List<Graph.Edge<Integer>> set = paths.get(end);
-            return (new Graph.CostPathPair<Integer>(pair.getCost(), set));
+            final Graph.CostVertexPair<T> pair = costs.get(end);
+            final List<Graph.Edge<T>> set = paths.get(end);
+            return (new Graph.CostPathPair<T>(pair.getCost(), set));
         }
         return null;
     }
 
-    private static boolean checkForNegativeEdges(Collection<Graph.Vertex<Integer>> vertitices) {
-        for (Graph.Vertex<Integer> v : vertitices) {
-            for (Graph.Edge<Integer> e : v.getEdges()) {
+    private boolean checkForNegativeEdges(Collection<Graph.Vertex<T>> vertitices) {
+        for (Graph.Vertex<T> v : vertitices) {
+            for (Graph.Edge<T> e : v.getEdges()) {
                 if (e.getCost() < 0)
                     return true;
             }

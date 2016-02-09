@@ -18,9 +18,9 @@ import com.jwetherell.algorithms.data_structures.Graph.Vertex;
  * 
  * @author Justin Wetherell <phishman3579@gmail.com>
  */
-public class ConnectedComponents {
+public class ConnectedComponents<T extends Comparable<T>> {
 
-    private ConnectedComponents() { }
+	public ConnectedComponents() { }
 
     /**
      * Finds the connected components subsets of the Graph.

@@ -184,6 +184,9 @@ public class Graph<T extends Comparable<T>> {
         private int weight = 0;
         private List<Edge<T>> edges = new ArrayList<Edge<T>>();
 
+        public Vertex() {
+        	this((T)null);
+        }
         public Vertex(T value) {
             this.value = value;
         }
@@ -241,7 +244,8 @@ public class Graph<T extends Comparable<T>> {
          */
         @Override
         public int hashCode() {
-            final int code = this.value.hashCode() + this.weight + this.edges.size();
+            int hashCode = this.value == null ? Integer.MAX_VALUE : this.value.hashCode();
+			final int code = hashCode + this.weight + this.edges.size();
             return 31 * code;
         }
 
@@ -262,10 +266,16 @@ public class Graph<T extends Comparable<T>> {
             final boolean edgesSizeEquals = this.edges.size() == v.edges.size();
             if (!edgesSizeEquals)
                 return false;
-
-            final boolean valuesEquals = this.value.equals(v.value);
-            if (!valuesEquals)
-                return false;
+            
+            if(this.value == null){
+            	if(v.value != null){
+            		return false;
+            	}
+            }else{
+                final boolean valuesEquals = this.value.equals(v.value);
+                if (!valuesEquals)
+                    return false;
+            }
 
             final Iterator<Edge<T>> iter1 = this.edges.iterator();
             final Iterator<Edge<T>> iter2 = v.edges.iterator();
