@@ -30,7 +30,7 @@ public class Dijkstra<T extends Comparable<T>> {
 
         final Map<Graph.Vertex<T>, Graph.CostPathPair<T>> map = new HashMap<Graph.Vertex<T>, Graph.CostPathPair<T>>();
         for (Graph.CostVertexPair<T> pair : costs.values()) {
-            int cost = pair.getCost();
+        	double cost = pair.getCost();
             Graph.Vertex<T> vertex = pair.getVertex();
             List<Graph.Edge<T>> path = paths.get(vertex);
             map.put(vertex, new Graph.CostPathPair<T>(cost, path));
@@ -87,7 +87,7 @@ public class Dijkstra<T extends Comparable<T>> {
             for (Graph.Edge<T> e : vertex.getEdges()) {
                 final Graph.CostVertexPair<T> toPair = costs.get(e.getToVertex()); // O(1)
                 final Graph.CostVertexPair<T> lowestCostToThisVertex = costs.get(vertex); // O(1)
-                final int cost = lowestCostToThisVertex.getCost() + e.getCost();
+                final double cost = lowestCostToThisVertex.getCost() + e.getCost();
                 if (toPair.getCost() == Integer.MAX_VALUE) {
                     // Haven't seen this vertex yet
 

@@ -649,63 +649,63 @@ public class Graphs {
     public void testFloydWarshallonDirectedWithNegWeights() {
         final DirectedWithNegativeWeights directedWithNegWeights = new DirectedWithNegativeWeights();
         {
-            final Map<Vertex<Integer>, Map<Vertex<Integer>, Integer>> pathWeights = new FloydWarshall<Integer>().getAllPairsShortestPaths(directedWithNegWeights.graph);  
-            final Map<Vertex<Integer>, Map<Vertex<Integer>, Integer>> result = new HashMap<Vertex<Integer>, Map<Vertex<Integer>, Integer>>();
+            final Map<Vertex<Integer>, Map<Vertex<Integer>, Double>> pathWeights = new FloydWarshall<Integer>().getAllPairsShortestPaths(directedWithNegWeights.graph);  
+            final Map<Vertex<Integer>, Map<Vertex<Integer>, Double>> result = new HashMap<Vertex<Integer>, Map<Vertex<Integer>, Double>>();
             {
                 // Ideal weights
                 {   // Vertex 3
-                    final Map<Vertex<Integer>, Integer> m = new HashMap<Vertex<Integer>, Integer>();
+                    final Map<Vertex<Integer>, Double> m = new HashMap<Vertex<Integer>, Double>();
                     {
                         // Vertex 3
-                        m.put(directedWithNegWeights.v3, 0);
+                        m.put(directedWithNegWeights.v3, 0.0);
                         // Vertex 4
-                        m.put(directedWithNegWeights.v4, 5);
+                        m.put(directedWithNegWeights.v4, 5.0);
                         // Vertex 2
-                        m.put(directedWithNegWeights.v2, -2);
+                        m.put(directedWithNegWeights.v2, -2.0);
                         // Vertex 1
-                        m.put(directedWithNegWeights.v1, 4);
+                        m.put(directedWithNegWeights.v1, 4.0);
                     }
                     result.put(directedWithNegWeights.v3, m);
                 }
                 {   // Vertex 4
-                    final Map<Vertex<Integer>, Integer> m = new HashMap<Vertex<Integer>, Integer>();
+                    final Map<Vertex<Integer>, Double> m = new HashMap<Vertex<Integer>, Double>();
                     {
                         // Vertex 3
-                        m.put(directedWithNegWeights.v3, -4);
+                        m.put(directedWithNegWeights.v3, -4.0);
                         // Vertex 4
-                        m.put(directedWithNegWeights.v4, 0);
+                        m.put(directedWithNegWeights.v4, 0.0);
                         // Vertex 2
-                        m.put(directedWithNegWeights.v2, -7);
+                        m.put(directedWithNegWeights.v2, -7.0);
                         // Vertex 1
-                        m.put(directedWithNegWeights.v1, -1);
+                        m.put(directedWithNegWeights.v1, -1.0);
                     }
                     result.put(directedWithNegWeights.v4, m);
                 }
                 {   // Vertex 2
-                    final Map<Vertex<Integer>, Integer> m = new HashMap<Vertex<Integer>, Integer>();
+                    final Map<Vertex<Integer>, Double> m = new HashMap<Vertex<Integer>, Double>();
                     {
                         // Vertex 3
-                        m.put(directedWithNegWeights.v3, 3);
+                        m.put(directedWithNegWeights.v3, 3.0);
                         // Vertex 4
-                        m.put(directedWithNegWeights.v4, 8);
+                        m.put(directedWithNegWeights.v4, 8.0);
                         // Vertex 2
-                        m.put(directedWithNegWeights.v2, 0);
+                        m.put(directedWithNegWeights.v2, 0.0);
                         // Vertex 1
-                        m.put(directedWithNegWeights.v1, 6);
+                        m.put(directedWithNegWeights.v1, 6.0);
                     }
                     result.put(directedWithNegWeights.v2, m);
                 }
                 {   // Vertex 1
-                    final Map<Vertex<Integer>, Integer> m = new HashMap<Vertex<Integer>, Integer>();
+                    final Map<Vertex<Integer>, Double> m = new HashMap<Vertex<Integer>, Double>();
                     {
                         // Vertex 3
-                        m.put(directedWithNegWeights.v3, -2);
+                        m.put(directedWithNegWeights.v3, -2.0);
                         // Vertex 4
-                        m.put(directedWithNegWeights.v4, 2);
+                        m.put(directedWithNegWeights.v4, 2.0);
                         // Vertex 2
-                        m.put(directedWithNegWeights.v2, -5);
+                        m.put(directedWithNegWeights.v2, -5.0);
                         // Vertex 1
-                        m.put(directedWithNegWeights.v1, 0);
+                        m.put(directedWithNegWeights.v1, 0.0);
                     }
                     result.put(directedWithNegWeights.v1, m);
                 }
@@ -713,11 +713,11 @@ public class Graphs {
     
             // Compare results
             for (Vertex<Integer> vertex1 : pathWeights.keySet()) {
-                final Map<Vertex<Integer>, Integer> m1 = pathWeights.get(vertex1);
-                final Map<Vertex<Integer>, Integer> m2 = result.get(vertex1);
+                final Map<Vertex<Integer>, Double> m1 = pathWeights.get(vertex1);
+                final Map<Vertex<Integer>, Double> m2 = result.get(vertex1);
                 for (Vertex<Integer> v : m1.keySet()) {
-                    final int i1 = m1.get(v);
-                    final int i2 = m2.get(v);
+                    final double i1 = m1.get(v);
+                    final double i2 = m2.get(v);
                     assertTrue("Floyd-Warshall's all-pairs shortest path weights error. i1="+i1+" i2="+i2, i1 == i2);
                 }
     

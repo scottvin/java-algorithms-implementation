@@ -44,7 +44,7 @@ public class Johnson<T extends Comparable<T>> {
         // Next the edges of the original graph are re-weighted using the values computed by the Bellman–Ford algorithm: an edge 
         // from u to v, having length w(u,v), is given the new length w(u,v) + h(u) − h(v).
         for (Graph.Edge<T> e : graph.getEdges()) {
-            final int weight = e.getCost();
+            final double weight = e.getCost();
             final Graph.Vertex<T> u = e.getFromVertex();
             final Graph.Vertex<T> v = e.getToVertex();
 
@@ -53,9 +53,9 @@ public class Johnson<T extends Comparable<T>> {
                 continue;
 
             // Adjust the costs
-            final int uCost = costs.get(u).getCost();
-            final int vCost = costs.get(v).getCost();
-            final int newWeight = weight + uCost - vCost;
+            final double uCost = costs.get(u).getCost();
+            final double vCost = costs.get(v).getCost();
+            final double newWeight = weight + uCost - vCost;
             e.setCost(newWeight);
         }
 

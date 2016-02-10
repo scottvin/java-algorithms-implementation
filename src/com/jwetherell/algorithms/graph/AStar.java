@@ -45,13 +45,13 @@ public class AStar<T extends Comparable<T>> {
         openSet.add(start);
         final Map<Graph.Vertex<T>,Graph.Vertex<T>> cameFrom = new HashMap<Graph.Vertex<T>,Graph.Vertex<T>>(size); // The map of navigated nodes.
 
-        final Map<Graph.Vertex<T>,Integer> gScore = new HashMap<Graph.Vertex<T>,Integer>(); // Cost from start along best known path.
-        gScore.put(start, 0);
+        final Map<Graph.Vertex<T>,Double> gScore = new HashMap<Graph.Vertex<T>,Double>(); // Cost from start along best known path.
+        gScore.put(start, 0.0);
 
         // Estimated total cost from start to goal through y.
-        final Map<Graph.Vertex<T>,Integer> fScore = new HashMap<Graph.Vertex<T>,Integer>();
+        final Map<Graph.Vertex<T>,Double> fScore = new HashMap<Graph.Vertex<T>,Double>();
         for (Graph.Vertex<T> v : graph.getVertices())
-            fScore.put(v, Integer.MAX_VALUE);
+            fScore.put(v, Double.MAX_VALUE);
         fScore.put(start, heuristicCostEstimate(start,goal));
 
         final Comparator<Graph.Vertex<T>> comparator = new Comparator<Graph.Vertex<T>>() {
@@ -80,7 +80,7 @@ public class AStar<T extends Comparable<T>> {
                 if (closedSet.contains(neighbor))
                     continue; // Ignore the neighbor which is already evaluated.
 
-                final int tenativeGScore = gScore.get(current) + distanceBetween(current,neighbor); // length of this path.
+                final double tenativeGScore = gScore.get(current) + distanceBetween(current,neighbor); // length of this path.
                 if (!openSet.contains(neighbor))
                     openSet.add(neighbor); // Discover a new node
                 else if (tenativeGScore >= gScore.get(neighbor))
@@ -89,7 +89,7 @@ public class AStar<T extends Comparable<T>> {
                 // This path is the best until now. Record it!
                 cameFrom.put(neighbor, current);
                 gScore.put(neighbor, tenativeGScore);
-                final int estimatedFScore = gScore.get(neighbor) + heuristicCostEstimate(neighbor, goal);
+                final double estimatedFScore = gScore.get(neighbor) + heuristicCostEstimate(neighbor, goal);
                 fScore.put(neighbor, estimatedFScore);
 
                 // fScore has changed, re-sort the list
@@ -104,7 +104,7 @@ public class AStar<T extends Comparable<T>> {
      * Default distance is the edge cost. If there is no edge between the start and next then
      * it returns Integer.MAX_VALUE;
      */
-    protected int distanceBetween(Graph.Vertex<T> start, Graph.Vertex<T> next) {
+    protected double distanceBetween(Graph.Vertex<T> start, Graph.Vertex<T> next) {
         for (Edge<T> e : start.getEdges()) {
             if (e.getToVertex().equals(next))
                 return e.getCost();
@@ -115,7 +115,7 @@ public class AStar<T extends Comparable<T>> {
     /**
      * Default heuristic: cost to each vertex is 1.
      */
-    protected int heuristicCostEstimate(Graph.Vertex<T> start, Graph.Vertex<T> goal) {
+    protected double heuristicCostEstimate(Graph.Vertex<T> start, Graph.Vertex<T> goal) {
         return 1;
     }
 

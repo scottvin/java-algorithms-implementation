@@ -18,13 +18,13 @@ public class FloydWarshall<T extends Comparable<T>> {
 
 	public FloydWarshall() { }
 
-    public Map<Graph.Vertex<T>, Map<Graph.Vertex<T>, Integer>> getAllPairsShortestPaths(Graph<T> graph) {
+    public Map<Graph.Vertex<T>, Map<Graph.Vertex<T>, Double>> getAllPairsShortestPaths(Graph<T> graph) {
         if (graph == null)
             throw (new NullPointerException("Graph must be non-NULL."));
 
         final List<Graph.Vertex<T>> vertices = graph.getVertices();
 
-        final int[][] sums = new int[vertices.size()][vertices.size()];
+        final double[][] sums = new double[vertices.size()][vertices.size()];
         for (int i = 0; i < sums.length; i++) {
             for (int j = 0; j < sums[i].length; j++) {
                 sums[i][j] = Integer.MAX_VALUE;
@@ -44,10 +44,10 @@ public class FloydWarshall<T extends Comparable<T>> {
                     if (i == j) {
                         sums[i][j] = 0;
                     } else {
-                        final int ijCost = sums[i][j];
-                        final int ikCost = sums[i][k];
-                        final int kjCost = sums[k][j];
-                        final int summed = (ikCost != Integer.MAX_VALUE && 
+                        final double ijCost = sums[i][j];
+                        final double ikCost = sums[i][k];
+                        final double kjCost = sums[k][j];
+                        final double summed = (ikCost != Integer.MAX_VALUE && 
                                             kjCost != Integer.MAX_VALUE) ? 
                                                    (ikCost + kjCost)
                                                : 
@@ -59,17 +59,17 @@ public class FloydWarshall<T extends Comparable<T>> {
             }
         }
 
-        final Map<Graph.Vertex<T>, Map<Graph.Vertex<T>, Integer>> allShortestPaths = new HashMap<Graph.Vertex<T>, Map<Graph.Vertex<T>, Integer>>();
+        final Map<Graph.Vertex<T>, Map<Graph.Vertex<T>, Double>> allShortestPaths = new HashMap<Graph.Vertex<T>, Map<Graph.Vertex<T>, Double>>();
         for (int i = 0; i < sums.length; i++) {
             for (int j = 0; j < sums[i].length; j++) {
                 final Graph.Vertex<T> from = vertices.get(i);
                 final Graph.Vertex<T> to = vertices.get(j);
 
-                Map<Graph.Vertex<T>, Integer> map = allShortestPaths.get(from);
+                Map<Graph.Vertex<T>, Double> map = allShortestPaths.get(from);
                 if (map == null)
-                    map = new HashMap<Graph.Vertex<T>, Integer>();
+                    map = new HashMap<Graph.Vertex<T>, Double>();
 
-                final int cost = sums[i][j];
+                final double cost = sums[i][j];
                 if (cost != Integer.MAX_VALUE)
                     map.put(to, cost);
                 allShortestPaths.put(from, map);

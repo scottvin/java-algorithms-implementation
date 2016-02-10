@@ -31,7 +31,7 @@ public class BellmanFord<T extends Comparable<T>> {
 
         final Map<Graph.Vertex<T>, Graph.CostPathPair<T>> map = new HashMap<Graph.Vertex<T>, Graph.CostPathPair<T>>();
         for (Graph.CostVertexPair<T> pair : costs.values()) {
-            final int cost = pair.getCost();
+            final double cost = pair.getCost();
             final Graph.Vertex<T> vertex = pair.getVertex();
             final List<Graph.Edge<T>> path = paths.get(vertex);
             map.put(vertex, new Graph.CostPathPair<T>(cost, path));
@@ -100,7 +100,7 @@ public class BellmanFord<T extends Comparable<T>> {
                 if (lowestCostToThisVertex.getCost() == Integer.MAX_VALUE)
                     continue;
 
-                final int cost = lowestCostToThisVertex.getCost() + e.getCost();
+                final double cost = lowestCostToThisVertex.getCost() + e.getCost();
                 if (cost < pair.getCost()) {
                     // Found a shorter path to a reachable vertex
                     pair.setCost(cost);
