@@ -1,7 +1,6 @@
 package com.jwetherell.algorithms.data_structures;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -11,9 +10,14 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.gephi.graph.api.Configuration;
+import org.gephi.graph.api.Node;
 import org.gephi.graph.impl.EdgeImpl;
+import org.gephi.graph.impl.EdgeStore;
+import org.gephi.graph.impl.GraphModelImpl;
 import org.gephi.graph.impl.GraphStore;
 import org.gephi.graph.impl.NodeImpl;
+import org.gephi.graph.impl.NodeStore;
 
 /**
  * Graph. Could be directed or undirected depending on the TYPE enum. A graph is
@@ -25,10 +29,7 @@ import org.gephi.graph.impl.NodeImpl;
  * @author Justin Wetherell <phishman3579@gmail.com>
  */
 @SuppressWarnings("unchecked")
-public class Graph<T extends Comparable<T>> {
-
-    private List<Vertex<T>> allVertices = new ArrayList<Vertex<T>>();
-    private List<Edge<T>> allEdges = new ArrayList<Edge<T>>();
+public class Graph<T extends Comparable<T>> extends GraphModelImpl  implements Comparable<Graph<T>> {
 
     public enum TYPE {
         DIRECTED, UNDIRECTED
@@ -37,26 +38,57 @@ public class Graph<T extends Comparable<T>> {
     /** Defaulted to undirected */
     private TYPE type = TYPE.UNDIRECTED;
 
-    public Graph() { }
+    public Graph() { 
+    	this(TYPE.UNDIRECTED);
+    }
 
     public Graph(TYPE type) {
+    	super(configuration());
         this.type = type;
     }
 
-    /** Deep copies **/
-    public Graph(Graph<T> g) {
-        type = g.getType();
+    private static Configuration configuration() {
+		Configuration configuration2 = new Configuration();
+		configuration2.setEdgeIdType(Integer.class);
+		configuration2.setNodeIdType(Integer.class);
+		configuration2.setEdgeWeightType(Double.class);
+		return configuration2;
+	}
 
-        // Copy the vertices which also copies the edges
-        for (Vertex<T> v : g.getVertices())
-            this.allVertices.add(new Vertex<T>(v));
+	/** Deep copies **/
+    public static <T extends Comparable<T>> Graph<T> copyGraph(Graph<T> g) {
+    	Graph<T> graph = new Graph<T>(g.getType());
+        System.out.println(graph);
 
-        for (Vertex<T> v : this.getVertices()) {
-            for (Edge<T> e : v.getEdges()) {
-                this.allEdges.add(e);
+        // Copy the vertices 
+        for (Vertex<T> fmOld : g.getAllVertices()){
+        	Vertex<T> fmNew = graph.newVertex(fmOld.getValue(), fmOld.getWeight());
+            // Copy the edges
+            for (Edge<T> e : fmOld.getEdges()) {
+            	Vertex<T> toOld = e.getToVertex();
+				Vertex<T> toNew = graph.newVertex(toOld.getValue(), toOld.getWeight());
+				graph.newEdge(Edge.id(fmNew, toNew), graph.getStore(), fmNew, toNew, e.getType(), e.getWeight(), e.isDirected());
+		        System.out.println(graph);
             }
         }
+        return graph;
     }
+
+	private Edge<T> newEdge(Object id, GraphStore store, Vertex<T> fm, Vertex<T> to, int type, double weight, boolean directed) {
+		Edge<T> edge = new Edge<T>(id, this.getStore(), fm, to, type, weight, directed);
+		this.addEdge(edge);
+		fm.addEdge(edge);
+		return edge;
+	}
+
+	private Vertex<T> newVertex(T value, double weight) {
+		Vertex<T> v = this.getVertex(value);
+		if(v == null){
+			v = new Vertex<T>(this.getStore(), value, weight);
+			this.addVertex(v);
+		}
+		return v;
+	}
 
     /**
      * Creates a Graph from the vertices and edges. This defaults to an undirected Graph
@@ -83,35 +115,71 @@ public class Graph<T extends Comparable<T>> {
     public Graph(TYPE type, Collection<Vertex<T>> vertices, Collection<Edge<T>> edges) {
         this(type);
 
-        this.allVertices.addAll(vertices);
-        this.allEdges.addAll(edges);
+        GraphStore gstore = this.getStore();
+		gstore.addAllNodes(vertices);
+        gstore.addAllEdges(edges);
 
         for (Edge<T> e : edges) {
             final Vertex<T> from = e.getFromVertex();
             final Vertex<T> to = e.getToVertex();
 
-            if (!this.allVertices.contains(from) || !this.allVertices.contains(to))
+            if (!gstore.contains(from) || !gstore.contains(to))
                 continue;
 
             from.addEdge(e);
             if (this.type == TYPE.UNDIRECTED) {
                 Edge<T> reciprical = new Edge<T>(e.getCost(), to, from);
                 to.addEdge(reciprical);
-                this.allEdges.add(reciprical);
+                this.addEdge(reciprical);
             }
         }
     }
+    
 
     public TYPE getType() {
         return type;
     }
 
-    public List<Vertex<T>> getVertices() {
-        return allVertices;
+    public List<Vertex<T>> getAllVertices() {
+        ArrayList<Vertex<T>> vertexList = new ArrayList<Vertex<T>>();
+        NodeStore ns = this.getStore().getNodeStore();
+        for (Node node : ns) {
+			vertexList.add((Vertex<T>) node);        	
+		}
+		return vertexList;
     }
 
-    public List<Edge<T>> getEdges() {
-        return allEdges;
+    public Vertex<T> getVertex(T value) {
+		return (Vertex<T>) super.getStore().getNode(value);
+	}
+
+    public boolean hasVertex(T value) {
+		return super.getStore().hasNode(value);
+	}
+
+    public boolean addVertex(Vertex<T> v) {
+		return super.getStore().addNode(v);
+	}
+
+    public boolean addEdge(Edge<T> e) {
+		return super.getStore().addEdge(e);
+	}
+
+    public boolean removeVertex(Vertex<T> v) {
+		return super.getStore().removeNode(v);
+	}
+
+    public boolean removeEdge(Edge<T> e) {
+		return super.getStore().removeEdge(e);
+	}
+
+	public List<Edge<T>> getAllEdges() {
+        ArrayList<Edge<T>> edgeList = new ArrayList<Edge<T>>();
+        EdgeStore es = this.getStore().getEdgeStore();
+        for (org.gephi.graph.api.Edge edge : es) {
+			edgeList.add((Edge<T>) edge);        	
+		}
+		return edgeList;
     }
 
     /**
@@ -119,76 +187,105 @@ public class Graph<T extends Comparable<T>> {
      */
     @Override
     public int hashCode() {
-        int code = this.type.hashCode() + this.allVertices.size() + this.allEdges.size();
-        for (Vertex<T> v : allVertices)
-            code *= v.hashCode();
-        for (Edge<T> e : allEdges)
-            code *= e.hashCode();
-        return 31 * code;
+    	GraphStore gstore = this.getStore();
+		HashCodeBuilder builder = new HashCodeBuilder()
+    			.append(this.type)
+    			.append(gstore.getNodeCount())
+    			.append(gstore.getEdgeCount());
+		for (Node n : gstore.getNodes())
+			builder.append(n);
+		for (org.gephi.graph.api.Edge e : gstore.getEdgeStore())
+			builder.append(e);
+		return builder.build();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(Object g1) {
-        if (!(g1 instanceof Graph))
-            return false;
-
-        final Graph<T> g = (Graph<T>) g1;
-
-        final boolean typeEquals = this.type == g.type;
-        if (!typeEquals)
-            return false;
-
-        final boolean verticesSizeEquals = this.allVertices.size() == g.allVertices.size();
-        if (!verticesSizeEquals)
-            return false;
-
-        final boolean edgesSizeEquals = this.allEdges.size() == g.allEdges.size();
-        if (!edgesSizeEquals)
-            return false;
-
-        // Vertices can contain duplicates and appear in different order but both arrays should contain the same elements
-        final Object[] ov1 = this.allVertices.toArray();
-        Arrays.sort(ov1);
-        final Object[] ov2 = g.allVertices.toArray();
-        Arrays.sort(ov2);
-        for (int i=0; i<ov1.length; i++) {
-            final Vertex<T> v1 = (Vertex<T>) ov1[i];
-            final Vertex<T> v2 = (Vertex<T>) ov2[i];
-            if (!v1.equals(v2))
-                return false;
+    public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (obj == this) {
+			return true;
+		}
+		if (obj.getClass() != getClass()) {
+			return false;
+		}
+		Graph<T> rhs = (Graph<T>) obj;
+		GraphStore lstore = this.getStore();
+		GraphStore rstore = rhs.getStore();
+		EqualsBuilder builder = new EqualsBuilder()
+				.append(this.getType(), rhs.getType())
+				.append(lstore.getNodeCount(), rstore.getNodeCount())
+				.append(lstore.getEdgeCount(), rstore.getEdgeCount());
+		
+        Iterator<Node> iter1 = lstore.getNodes().iterator();
+        Iterator<Node> iter2 = rstore.getNodes().iterator();
+        while (iter1.hasNext() && iter2.hasNext()) {
+            // Only checking the cost
+      	  builder.append(iter1.next(), iter2.next());
         }
 
-        // Edges can contain duplicates and appear in different order but both arrays should contain the same elements
-        final Object[] oe1 = this.allEdges.toArray();
-        Arrays.sort(oe1);
-        final Object[] oe2 = g.allEdges.toArray();
-        Arrays.sort(oe2);
-        for (int i=0; i<oe1.length; i++) {
-            final Edge<T> e1 = (Edge<T>) oe1[i];
-            final Edge<T> e2 = (Edge<T>) oe2[i];
-            if (!e1.equals(e2))
-                return false;
+        Iterator<org.gephi.graph.api.Edge> ei1 = lstore.getEdges().iterator();
+        Iterator<org.gephi.graph.api.Edge> ei2 = rstore.getEdges().iterator();
+        while (ei1.hasNext() && ei2.hasNext()) {
+            // Only checking the cost
+      	  builder.append(ei1.next(), ei2.next());
         }
 
-        return true;
+		return builder.build();
     }
 
-    /**
+    @Override
+	public int compareTo(Graph<T> rhs) {
+    	GraphStore rstore = rhs.getStore();
+		GraphStore lstore = this.getStore();
+		CompareToBuilder builder = new CompareToBuilder()
+				.append(this.getType(), rhs.getType())
+				.append(lstore.getNodeCount(), rstore.getNodeCount())
+				.append(lstore.getEdgeCount(), rstore.getEdgeCount());
+		
+        Iterator<Node> iter1 = lstore.getNodes().iterator();
+        Iterator<Node> iter2 = rstore.getNodes().iterator();
+        while (iter1.hasNext() && iter2.hasNext()) {
+            // Only checking the cost
+      	  builder.append(iter1.next(), iter2.next());
+        }
+
+        Iterator<org.gephi.graph.api.Edge> ei1 = lstore.getEdges().iterator();
+        Iterator<org.gephi.graph.api.Edge> ei2 = rstore.getEdges().iterator();
+        while (ei1.hasNext() && ei2.hasNext()) {
+            // Only checking the cost
+      	  builder.append(ei1.next(), ei2.next());
+        }
+
+		return builder.build();
+	}
+
+	/**
      * {@inheritDoc}
      */
     @Override
     public String toString() {
-        final StringBuilder builder = new StringBuilder();
-        for (Vertex<T> v : allVertices)
-            builder.append(v.toString());
-        return builder.toString();
+        final ToStringBuilder builder = new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    	builder.append("Vertices\n");
+        GraphStore gstore = this.getStore();
+		for (Node n : gstore.getNodes()){
+        	builder.append(n);
+        	builder.append("\n");
+        }
+    	builder.append("Edges\n");
+        for (org.gephi.graph.api.Edge e : gstore.getEdges()){
+            builder.append(e);
+        	builder.append("\n");
+        }
+        return builder.build();
     }
 
     public static class Vertex<T extends Comparable<T>> extends NodeImpl implements Comparable<Vertex<T>> {
-
+    	private GraphStore graphStore = new GraphStore();
         private double weight = 0;
         private List<Edge<T>> edges = new ArrayList<Edge<T>>();
 
@@ -205,13 +302,6 @@ public class Graph<T extends Comparable<T>> {
         public Vertex(GraphStore graphStore, T value, double weight) {
         	super(value == null ? Integer.MAX_VALUE : value, graphStore);
             this.weight = weight;
-        }
-
-        /** Deep copies the edges along with the value and weight **/
-        public Vertex(Vertex<T> vertex) {
-            this(vertex.getGraphStore(), vertex.getValue(), vertex.weight);
-
-            this.edges.addAll(vertex.edges);
         }
 
         public T getValue() {
@@ -316,21 +406,36 @@ public class Graph<T extends Comparable<T>> {
 			final ToStringBuilder builder = new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
 					.append("Value", this.getValue())
 					.append("Weight", this.getWeight());
-			for (Edge<T> e : this.getEdges())
-				builder.append(e);
+			boolean first = true;
+			for (Edge<T> e : this.getEdges()){
+				if(first){
+					builder.append("Edges=", e.getCost());
+				}else{
+					builder.append(e.getCost());
+				}
+				first = false;
+			}
 			return builder.build();
+		}
+		public GraphStore getGraphStore() {
+			return graphStore;
+		}
+		public void setGraphStore(GraphStore graphStore) {
+			this.graphStore = graphStore;
 		}
     }
 
     public static class Edge<T extends Comparable<T>> extends EdgeImpl implements Comparable<Edge<T>> {
+    	
+    	GraphStore graphStore = new GraphStore();
 
-
-        public Edge(Object id, GraphStore graphStore, Vertex<T> source, Vertex<T> target, int type, double weight, boolean directed) {
+		public Edge(Object id, GraphStore graphStore, Vertex<T> source, Vertex<T> target, int type, double weight, boolean directed) {
         	super(id, graphStore, source, target, type, weight, directed);
+        	
         }
         
         public Edge(double cost, Vertex<T> from, Vertex<T> to) {
-        	super(id(from, to), null, from, to, 0, (double)cost, true);
+        	this(id(from, to), from.getGraphStore(), from, to, 0, (double)cost, true);
         }
 
         private static <T extends Comparable<T>> Object id(Vertex<T> from, Vertex<T> to) {
@@ -340,11 +445,11 @@ public class Graph<T extends Comparable<T>> {
 					.build();
 		}
 
-		public Edge(Edge<T> e) {
-            this(e.getCost(), e.getFromVertex(), e.getToVertex());
-        }
+        public GraphStore getGraphStore() {
+			return graphStore;
+		}
 
-        public double getCost() {
+		public double getCost() {
             return this.getWeight();
         }
 
@@ -408,11 +513,15 @@ public class Graph<T extends Comparable<T>> {
         @Override
         public String toString() {
             ToStringBuilder builder = new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE);
-            builder.append("FromVertex", this.getFromVertex())
-                   .append("ToVertex", this.getToVertex())
-                   .append("Cost", this.getCost()).append("\n");
+            builder.append("FromVertex", this.getFromVertex().getValue())
+                   .append("ToVertex", this.getToVertex().getValue())
+                   .append("Cost", this.getCost());
             return builder.toString();
         }
+
+		public void setGraphStore(GraphStore graphStore) {
+			this.graphStore = graphStore;
+		}
     }
 
     public static class CostVertexPair<T extends Comparable<T>> implements Comparable<CostVertexPair<T>> {

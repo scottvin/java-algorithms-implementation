@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.jwetherell.algorithms.data_structures.Graph;
+import com.jwetherell.algorithms.data_structures.Graph.Vertex;
 
 /**
  * Bellman-Ford's shortest path. Works on both negative and positive weighted
@@ -74,25 +75,26 @@ public class BellmanFord<T extends Comparable<T>> {
         if (start == null)
             throw (new NullPointerException("start must be non-NULL."));
 
-        for (Graph.Vertex<T> v : graph.getVertices())
+        List<Vertex<T>> allVertices = graph.getAllVertices();
+		for (Graph.Vertex<T> v : allVertices)
             paths.put(v, new ArrayList<Graph.Edge<T>>());
 
         // All vertices are INFINITY unless it's the start vertices
-        for (Graph.Vertex<T> v : graph.getVertices())
+        for (Graph.Vertex<T> v : allVertices)
             if (v.equals(start))
                 costs.put(v, new Graph.CostVertexPair<T>(0, v));
             else
                 costs.put(v, new Graph.CostVertexPair<T>(Integer.MAX_VALUE, v));
 
         boolean negativeCycleCheck = false;
-        for (int i = 0; i < graph.getVertices().size(); i++) {
+        for (int i = 0; i < allVertices.size(); i++) {
             // If it's the last vertices, perform a negative weight cycle check.
             // The graph should be finished by the size()-1 time through this loop.
-            if (i == (graph.getVertices().size() - 1))
+            if (i == (allVertices.size() - 1))
                 negativeCycleCheck = true;
 
             // Compute costs to all vertices
-            for (Graph.Edge<T> e : graph.getEdges()) {
+            for (Graph.Edge<T> e : graph.getAllEdges()) {
                 final Graph.CostVertexPair<T> pair = costs.get(e.getToVertex());
                 final Graph.CostVertexPair<T> lowestCostToThisVertex = costs.get(e.getFromVertex());
 

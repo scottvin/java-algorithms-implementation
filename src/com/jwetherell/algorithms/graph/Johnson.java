@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.jwetherell.algorithms.data_structures.Graph;
+import com.jwetherell.algorithms.data_structures.Graph.Edge;
+import com.jwetherell.algorithms.data_structures.Graph.Vertex;
 
 /**
  * Johnson's algorithm is a way to find the shortest paths between all pairs of
@@ -24,18 +26,21 @@ public class Johnson<T extends Comparable<T>> {
             throw (new NullPointerException("Graph must be non-NULL."));
 
         // First, a new node 'connector' is added to the graph, connected by zero-weight edges to each of the other nodes.
-        final Graph<T> graph = new Graph<T>(g);
+        final Graph<T> graph = Graph.copyGraph(g);
         final Graph.Vertex<T> connector = new Graph.Vertex<T>();
-
+		
+        graph.addVertex(connector);
+        
         // Add the connector Vertex to all edges.
-        for (Graph.Vertex<T> v : graph.getVertices()) {
-            final int indexOfV = graph.getVertices().indexOf(v);
-            final Graph.Edge<T> edge = new Graph.Edge<T>(0, connector, graph.getVertices().get(indexOfV));
-            connector.addEdge(edge);
-            graph.getEdges().add(edge);
+        List<Vertex<T>> allVertices = graph.getAllVertices();
+		List<Edge<T>> allEdges = graph.getAllEdges();
+		for (Graph.Vertex<T> v : allVertices) {
+			if(!connector.equals(v)){
+	            final Graph.Edge<T> edge = new Graph.Edge<T>(0, connector, v);
+	            connector.addEdge(edge);
+	            graph.addEdge(edge);
+			}
         }
-
-        graph.getVertices().add(connector);
 
         // Second, the Bellman–Ford algorithm is used, starting from the new vertex 'connector', to find for each vertex 'v'
         // the minimum weight h(v) of a path from 'connector' to 'v'. If this step detects a negative cycle, the algorithm is terminated.
@@ -43,7 +48,7 @@ public class Johnson<T extends Comparable<T>> {
 
         // Next the edges of the original graph are re-weighted using the values computed by the Bellman–Ford algorithm: an edge 
         // from u to v, having length w(u,v), is given the new length w(u,v) + h(u) − h(v).
-        for (Graph.Edge<T> e : graph.getEdges()) {
+        for (Graph.Edge<T> e : allEdges) {
             final double weight = e.getCost();
             final Graph.Vertex<T> u = e.getFromVertex();
             final Graph.Vertex<T> v = e.getToVertex();
@@ -61,15 +66,13 @@ public class Johnson<T extends Comparable<T>> {
 
         // Finally, 'connector' is removed, and Dijkstra's algorithm is used to find the shortest paths from each node (s) to every 
         // other vertex in the re-weighted graph.
-        final int indexOfConnector = graph.getVertices().indexOf(connector);
-        graph.getVertices().remove(indexOfConnector);
         for (Graph.Edge<T> e : connector.getEdges()) {
-            final int indexOfConnectorEdge = graph.getEdges().indexOf(e);
-            graph.getEdges().remove(indexOfConnectorEdge);
+            graph.removeEdge(e);
         }
+        graph.removeVertex(connector);
 
         final Map<Graph.Vertex<T>, Map<Graph.Vertex<T>, List<Graph.Edge<T>>>> allShortestPaths = new HashMap<Graph.Vertex<T>, Map<Graph.Vertex<T>, List<Graph.Edge<T>>>>();
-        for (Graph.Vertex<T> v : graph.getVertices()) {
+        for (Graph.Vertex<T> v : allVertices) {
             final Map<Graph.Vertex<T>, Graph.CostPathPair<T>> costPaths = new Dijkstra<T>().getShortestPaths(graph, v);
             final Map<Graph.Vertex<T>, List<Graph.Edge<T>>> paths = new HashMap<Graph.Vertex<T>, List<Graph.Edge<T>>>();
             for (Graph.Vertex<T> v2 : costPaths.keySet()) {

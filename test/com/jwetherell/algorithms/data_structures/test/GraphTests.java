@@ -83,7 +83,7 @@ public class GraphTests {
         edges.add(e5);
 
         final Graph<Integer> graph = new Graph<Integer>(TYPE.DIRECTED, vertices, edges);
-        final Graph<Integer> clone = new Graph<Integer>(graph);
+        final Graph<Integer> clone = Graph.copyGraph(graph);
 
         Assert.assertTrue(graph.equals(clone) && graph.hashCode()==clone.hashCode());
     }

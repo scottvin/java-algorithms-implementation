@@ -32,15 +32,15 @@ public class TopologicalSort<T extends Comparable<T>> {
             throw new IllegalArgumentException("Cannot perform a topological sort on a non-directed graph. graph type = "+graph.getType());
 
         // clone to prevent changes the graph parameter's state
-        final Graph<T> clone = new Graph<T>(graph);
+        final Graph<T> clone = Graph.copyGraph(graph);
         final List<Graph.Vertex<T>> sorted = new ArrayList<Graph.Vertex<T>>();
         final List<Graph.Vertex<T>> noOutgoing = new ArrayList<Graph.Vertex<T>>();
 
         final List<Graph.Edge<T>> edges = new ArrayList<Graph.Edge<T>>();
-        edges.addAll(clone.getEdges());
+        edges.addAll(clone.getAllEdges());
 
         // Find all the vertices which have no outgoing edges
-        for (Graph.Vertex<T> v : clone.getVertices()) {
+        for (Graph.Vertex<T> v : clone.getAllVertices()) {
             if (v.getEdges().size() == 0)
                 noOutgoing.add(v);
         }

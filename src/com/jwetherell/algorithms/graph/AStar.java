@@ -39,7 +39,8 @@ public class AStar<T extends Comparable<T>> {
      *          List of Edges to get from start to end or NULL if no path exists.
      */
     public List<Graph.Edge<T>> aStar(Graph<T> graph, Graph.Vertex<T> start, Graph.Vertex<T> goal) {
-        final int size = graph.getVertices().size(); // used to size data structures appropriately
+        List<Vertex<T>> allVertices = graph.getAllVertices();
+		final int size = allVertices.size(); // used to size data structures appropriately
         final Set<Graph.Vertex<T>> closedSet = new HashSet<Graph.Vertex<T>>(size); // The set of nodes already evaluated.
         final List<Graph.Vertex<T>> openSet = new ArrayList<Graph.Vertex<T>>(size); // The set of tentative nodes to be evaluated, initially containing the start node
         openSet.add(start);
@@ -50,7 +51,7 @@ public class AStar<T extends Comparable<T>> {
 
         // Estimated total cost from start to goal through y.
         final Map<Graph.Vertex<T>,Double> fScore = new HashMap<Graph.Vertex<T>,Double>();
-        for (Graph.Vertex<T> v : graph.getVertices())
+        for (Graph.Vertex<T> v : allVertices)
             fScore.put(v, Double.MAX_VALUE);
         fScore.put(start, heuristicCostEstimate(start,goal));
 

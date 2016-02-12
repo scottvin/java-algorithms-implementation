@@ -9,6 +9,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 import com.jwetherell.algorithms.data_structures.Graph;
+import com.jwetherell.algorithms.data_structures.Graph.Vertex;
 
 /**
  * Dijkstra's shortest path. Only works on non-negative path weights. Returns a
@@ -43,7 +44,7 @@ public class Dijkstra<T extends Comparable<T>> {
             throw (new NullPointerException("Graph must be non-NULL."));
 
         // Dijkstra's algorithm only works on positive cost graphs
-        final boolean hasNegativeEdge = checkForNegativeEdges(graph.getVertices());
+        final boolean hasNegativeEdge = checkForNegativeEdges(graph.getAllVertices());
         if (hasNegativeEdge)
             throw (new IllegalArgumentException("Negative cost Edges are not allowed."));
 
@@ -62,14 +63,15 @@ public class Dijkstra<T extends Comparable<T>> {
             throw (new NullPointerException("start must be non-NULL."));
 
         // Dijkstra's algorithm only works on positive cost graphs
-        boolean hasNegativeEdge = checkForNegativeEdges(graph.getVertices());
+        List<Vertex<T>> allVertices = graph.getAllVertices();
+		boolean hasNegativeEdge = checkForNegativeEdges(allVertices);
         if (hasNegativeEdge)
             throw (new IllegalArgumentException("Negative cost Edges are not allowed."));
 
-        for (Graph.Vertex<T> v : graph.getVertices())
+        for (Graph.Vertex<T> v : allVertices)
             paths.put(v, new ArrayList<Graph.Edge<T>>());
 
-        for (Graph.Vertex<T> v : graph.getVertices()) {
+        for (Graph.Vertex<T> v : allVertices) {
             if (v.equals(start))
                 costs.put(v, new Graph.CostVertexPair<T>(0, v));
             else

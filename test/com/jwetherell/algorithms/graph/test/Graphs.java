@@ -858,41 +858,48 @@ public class Graphs {
     public void connectedComponents() {
         {
             final Graph<Integer> g = makeDirectedGraph(3, 2, new int[]{5, 4, 7});
-            Assert.assertTrue(ConnectedComponents.getConnectedComponents(g).size()==2);
+            int size = ConnectedComponents.getConnectedComponents(g).size();
+			Assert.assertEquals("ConnectedComponents.getConnectedComponents(g).size()", size, 2);
         }
 
         {
             final Graph<Integer> g = makeDirectedGraph(5, 1, new int[]{5, 3, 4, 5, 6});
-            Assert.assertTrue(ConnectedComponents.getConnectedComponents(g).size()==1);
+            int size = ConnectedComponents.getConnectedComponents(g).size();
+            Assert.assertEquals("ConnectedComponents.getConnectedComponents(g).size()", size, 1);
         }
 
         {
             final Graph<Integer> g = makeDirectedGraph(8, 51, new int[]{49, 57, 3, 95, 98, 100, 44, 40});
-            Assert.assertTrue(ConnectedComponents.getConnectedComponents(g).size()==3);
+            int size = ConnectedComponents.getConnectedComponents(g).size();
+            Assert.assertEquals("ConnectedComponents.getConnectedComponents(g).size()", size, 3);
         }
 
         {
             final Graph<Integer> g = makeDirectedGraph(28, 79, new int[]{123, 60, 227, 766, 400, 405, 24, 968, 359, 533, 689, 409, 
                                                                          188, 677, 231, 295, 240, 52, 373, 243, 493, 645, 307, 781, 
                                                                          523, 494, 950, 899});
-            Assert.assertTrue(ConnectedComponents.getConnectedComponents(g).size()==3);
+            int size = ConnectedComponents.getConnectedComponents(g).size();
+            Assert.assertEquals("ConnectedComponents.getConnectedComponents(g).size()", size, 3);
         }
 
         {
             final Graph<Integer> g = makeDirectedGraph(15, 564, new int[]{617, 400, 658, 30, 891, 517, 304, 156, 254, 610, 72, 371, 
                                                                           411, 689, 381});
-            Assert.assertTrue(ConnectedComponents.getConnectedComponents(g).size()==10);
+            int size = ConnectedComponents.getConnectedComponents(g).size();
+            Assert.assertEquals("ConnectedComponents.getConnectedComponents(g).size()", size, 10);
         }
 
         {
             final Graph<Integer> g = makeDirectedGraph(13, 422, new int[]{87, 950, 773, 928, 696, 131, 809, 781, 348, 144, 717, 555, 311});
-            Assert.assertTrue(ConnectedComponents.getConnectedComponents(g).size()==6);
+            int size = ConnectedComponents.getConnectedComponents(g).size();
+            Assert.assertEquals("ConnectedComponents.getConnectedComponents(g).size()", size, 6);
         }
 
         {
             final Graph<Integer> g = makeDirectedGraph(17, 599, new int[]{903, 868, 67, 690, 841, 815, 469, 554, 647, 235, 787, 221, 669, 
                                                                           87, 60, 28, 324});
-            Assert.assertTrue(ConnectedComponents.getConnectedComponents(g).size()==10);
+            int size = ConnectedComponents.getConnectedComponents(g).size();
+            Assert.assertEquals("ConnectedComponents.getConnectedComponents(g).size()", size, 10);
         }
     }
 
@@ -927,24 +934,25 @@ public class Graphs {
      * vertices values is >= K
      */
     private static final Graph<Integer> makeDirectedGraph(int N, int K, int[] values) {
-        final List<Vertex<Integer>> vertices = new ArrayList<Vertex<Integer>>(values.length);
-        for (int i=0; i<values.length; i++)
-            vertices.add(new Vertex<Integer>(values[i], 0));
+        final Graph<Integer> g = new Graph<Integer>(TYPE.DIRECTED);
+        for (int i=0; i<values.length; i++){
+        	if(!g.hasVertex(values[i]))
+        		g.addVertex(new Vertex<Integer>(values[i], 0));
+        }
 
-        final List<Edge<Integer>> edges = new ArrayList<Edge<Integer>>(values.length);
         for (int i=0; i<values.length; i++) {
-            final Vertex<Integer> vi = vertices.get(i);
+            final Vertex<Integer> vi = g.getVertex(values[i]);
             for (int j=i+1; j<values.length; j++) {
-                final Vertex<Integer> vj = vertices.get(j);
+                final Vertex<Integer> vj = g.getVertex(values[j]);
                 final int diff = Math.abs(vi.getValue() - vj.getValue());
                 if (diff >= K) {
                     final Edge<Integer> eij = new Edge<Integer>(diff, vi, vj);
-                    edges.add(eij);
+                    g.addEdge(eij);
+                    vi.addEdge(eij);
                 }
             }
         }
 
-        final Graph<Integer> g = new Graph<Integer>(TYPE.DIRECTED, vertices, edges);
         return g;
     }
 }

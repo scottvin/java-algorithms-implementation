@@ -31,7 +31,7 @@ public class Prim<T extends Comparable<T>> {
         int cost = 0;
 
         final Set<Graph.Vertex<T>> unvisited = new HashSet<Graph.Vertex<T>>();
-        unvisited.addAll(graph.getVertices());
+        unvisited.addAll(graph.getAllVertices());
         unvisited.remove(start); // O(1)
 
         final List<Graph.Edge<T>> path = new ArrayList<Graph.Edge<T>>();

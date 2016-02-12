@@ -31,7 +31,7 @@ public class CycleDetection<T extends Comparable<T>> {
         final Set<Graph.Vertex<T>> visitedVerticies = new HashSet<Graph.Vertex<T>>();
         final Set<Graph.Edge<T>> visitedEdges = new HashSet<Graph.Edge<T>>();
 
-        final List<Graph.Vertex<T>> verticies = graph.getVertices();
+        final List<Graph.Vertex<T>> verticies = graph.getAllVertices();
         if (verticies == null || verticies.size() == 0)
             return false;
 

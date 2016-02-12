@@ -39,7 +39,7 @@ public class ConnectedComponents<T extends Comparable<T>> {
         final List<List<Vertex<T>>> list = new ArrayList<List<Vertex<T>>>();
 
         int c = 0;
-        for (Vertex<T> v : graph.getVertices()) 
+        for (Vertex<T> v : graph.getAllVertices()) 
             if (map.get(v) == null)
                 visit(map, list, v, c++);
         return list;

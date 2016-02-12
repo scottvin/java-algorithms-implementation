@@ -22,7 +22,7 @@ public class FloydWarshall<T extends Comparable<T>> {
         if (graph == null)
             throw (new NullPointerException("Graph must be non-NULL."));
 
-        final List<Graph.Vertex<T>> vertices = graph.getVertices();
+        final List<Graph.Vertex<T>> vertices = graph.getAllVertices();
 
         final double[][] sums = new double[vertices.size()][vertices.size()];
         for (int i = 0; i < sums.length; i++) {
@@ -31,7 +31,7 @@ public class FloydWarshall<T extends Comparable<T>> {
             }
         }
 
-        final List<Graph.Edge<T>> edges = graph.getEdges();
+        final List<Graph.Edge<T>> edges = graph.getAllEdges();
         for (Graph.Edge<T> e : edges) {
             final int indexOfFrom = vertices.indexOf(e.getFromVertex());
             final int indexOfTo = vertices.indexOf(e.getToVertex());
