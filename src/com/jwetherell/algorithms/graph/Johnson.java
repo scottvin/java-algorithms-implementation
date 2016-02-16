@@ -26,17 +26,17 @@ public class Johnson<T extends Comparable<T>> {
             throw (new NullPointerException("Graph must be non-NULL."));
 
         // First, a new node 'connector' is added to the graph, connected by zero-weight edges to each of the other nodes.
-        final Graph<T> graph = Graph.copyGraph(g);
-        final Graph.Vertex<T> connector = new Graph.Vertex<T>();
-		
-        graph.addVertex(connector);
+        final Graph<T> graph = /*Graph.copyGraph*/(g);
+        final Graph.Vertex<T> connector = new Graph.Vertex<T>(graph);
         
-        // Add the connector Vertex to all edges.
         List<Vertex<T>> allVertices = graph.getAllVertices();
 		List<Edge<T>> allEdges = graph.getAllEdges();
+		
+        // Add the connector Vertex to all edges.
+        graph.addVertex(connector);
 		for (Graph.Vertex<T> v : allVertices) {
 			if(!connector.equals(v)){
-	            final Graph.Edge<T> edge = new Graph.Edge<T>(0, connector, v);
+	            final Graph.Edge<T> edge = new Graph.Edge<T>(g, 0, connector, v);
 	            connector.addEdge(edge);
 	            graph.addEdge(edge);
 			}
@@ -66,9 +66,9 @@ public class Johnson<T extends Comparable<T>> {
 
         // Finally, 'connector' is removed, and Dijkstra's algorithm is used to find the shortest paths from each node (s) to every 
         // other vertex in the re-weighted graph.
-        for (Graph.Edge<T> e : connector.getEdges()) {
-            graph.removeEdge(e);
-        }
+//        for (Graph.Edge<T> e : connector.getEdges()) {
+//            graph.removeEdge(e);
+//        }
         graph.removeVertex(connector);
 
         final Map<Graph.Vertex<T>, Map<Graph.Vertex<T>, List<Graph.Edge<T>>>> allShortestPaths = new HashMap<Graph.Vertex<T>, Map<Graph.Vertex<T>, List<Graph.Edge<T>>>>();

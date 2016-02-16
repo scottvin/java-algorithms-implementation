@@ -30,6 +30,8 @@ import org.gephi.graph.impl.NodeStore;
  */
 @SuppressWarnings("unchecked")
 public class Graph<T extends Comparable<T>> extends GraphModelImpl  implements Comparable<Graph<T>> {
+	private Collection<Vertex<T>> vertices = null;
+	private Collection<Edge<T>> edges = null;
 
     public enum TYPE {
         DIRECTED, UNDIRECTED
@@ -58,7 +60,6 @@ public class Graph<T extends Comparable<T>> extends GraphModelImpl  implements C
 	/** Deep copies **/
     public static <T extends Comparable<T>> Graph<T> copyGraph(Graph<T> g) {
     	Graph<T> graph = new Graph<T>(g.getType());
-        System.out.println(graph);
 
         // Copy the vertices 
         for (Vertex<T> fmOld : g.getAllVertices()){
@@ -68,7 +69,6 @@ public class Graph<T extends Comparable<T>> extends GraphModelImpl  implements C
             	Vertex<T> toOld = e.getToVertex();
 				Vertex<T> toNew = graph.newVertex(toOld.getValue(), toOld.getWeight());
 				graph.newEdge(Edge.id(fmNew, toNew), graph.getStore(), fmNew, toNew, e.getType(), e.getWeight(), e.isDirected());
-		        System.out.println(graph);
             }
         }
         return graph;
@@ -84,57 +84,11 @@ public class Graph<T extends Comparable<T>> extends GraphModelImpl  implements C
 	private Vertex<T> newVertex(T value, double weight) {
 		Vertex<T> v = this.getVertex(value);
 		if(v == null){
-			v = new Vertex<T>(this.getStore(), value, weight);
+			v = new Vertex<T>(this, value, weight);
 			this.addVertex(v);
 		}
 		return v;
 	}
-
-    /**
-     * Creates a Graph from the vertices and edges. This defaults to an undirected Graph
-     * 
-     * NOTE: Duplicate vertices and edges ARE allowed.
-     * NOTE: Copies the vertex and edge objects but does NOT store the Collection parameters itself.
-     * 
-     * @param vertices Collection of vertices
-     * @param edges Collection of edges
-     */
-    public Graph(Collection<Vertex<T>> vertices, Collection<Edge<T>> edges) {
-        this(TYPE.UNDIRECTED, vertices, edges);
-    }
-
-    /**
-     * Creates a Graph from the vertices and edges.
-     * 
-     * NOTE: Duplicate vertices and edges ARE allowed.
-     * NOTE: Copies the vertex and edge objects but does NOT store the Collection parameters itself.
-     * 
-     * @param vertices Collection of vertices
-     * @param edges Collection of edges
-     */
-    public Graph(TYPE type, Collection<Vertex<T>> vertices, Collection<Edge<T>> edges) {
-        this(type);
-
-        GraphStore gstore = this.getStore();
-		gstore.addAllNodes(vertices);
-        gstore.addAllEdges(edges);
-
-        for (Edge<T> e : edges) {
-            final Vertex<T> from = e.getFromVertex();
-            final Vertex<T> to = e.getToVertex();
-
-            if (!gstore.contains(from) || !gstore.contains(to))
-                continue;
-
-            from.addEdge(e);
-            if (this.type == TYPE.UNDIRECTED) {
-                Edge<T> reciprical = new Edge<T>(e.getCost(), to, from);
-                to.addEdge(reciprical);
-                this.addEdge(reciprical);
-            }
-        }
-    }
-    
 
     public TYPE getType() {
         return type;
@@ -284,23 +238,76 @@ public class Graph<T extends Comparable<T>> extends GraphModelImpl  implements C
         return builder.build();
     }
 
-    public static class Vertex<T extends Comparable<T>> extends NodeImpl implements Comparable<Vertex<T>> {
+    /**
+	 * Creates a Graph from the vertices and edges. This defaults to an undirected Graph
+	 * 
+	 * NOTE: Duplicate vertices and edges ARE allowed.
+	 * NOTE: Copies the vertex and edge objects but does NOT store the Collection parameters itself.
+	 * 
+	 * @param vertices Collection of vertices
+	 * @param edges Collection of edges
+	 */
+	public Graph(Collection<Vertex<T>> vertices, Collection<Edge<T>> edges) {
+	    this(TYPE.UNDIRECTED, vertices, edges);
+	}
+
+	/**
+	 * Creates a Graph from the vertices and edges.
+	 * 
+	 * NOTE: Duplicate vertices and edges ARE allowed.
+	 * NOTE: Copies the vertex and edge objects but does NOT store the Collection parameters itself.
+	 * 
+	 * @param vertices Collection of vertices
+	 * @param edges Collection of edges
+	 */
+	public Graph(TYPE type, Collection<Vertex<T>> vertices, Collection<Edge<T>> edges) {
+	    this(type);
+	    initiate(vertices, edges);
+	}
+
+	private void initiate(Collection<Vertex<T>> vertices, Collection<Edge<T>> edges) {
+		this.edges = edges;
+		this.vertices = vertices;
+		
+	}
+
+	public Graph<T> populate() {
+		
+		GraphStore gstore = this.getStore();
+	    gstore.clear();
+		gstore.addAllNodes(vertices);
+	    gstore.addAllEdges(edges);
+	    for (Edge<T> e : edges) {
+	        final Vertex<T> from = (Vertex<T>) gstore.getNode(e.getFromVertex().getId());
+	        final Vertex<T> to = (Vertex<T>) gstore.getNode(e.getToVertex().getId());
+	
+	        if (!gstore.contains(from) || !gstore.contains(to))
+	            continue;
+	
+	        from.addEdge(e);
+	        if (this.type == TYPE.UNDIRECTED) {
+	            Edge<T> reciprical = new Edge<T>(this, e.getCost(), to, from);
+	            to.addEdge(reciprical);
+	            this.addEdge(reciprical);
+	        }
+	    }
+	    return this;
+	}
+
+	public static class Vertex<T extends Comparable<T>> extends NodeImpl implements Comparable<Vertex<T>> {
     	private GraphStore graphStore = new GraphStore();
         private double weight = 0;
         private List<Edge<T>> edges = new ArrayList<Edge<T>>();
 
-        public Vertex() {
-        	this((T)null);
+        public Vertex(Graph<T> graph) {
+        	this(graph, (T)null);
         }
-        public Vertex(T value) {
-        	this(null, value, 0);
+        public Vertex(Graph<T> graph, T value) {
+        	this(graph, value, 0);
         }
 
-        public Vertex(T value, double weight) {
-        	this(null, value, weight);
-        }
-        public Vertex(GraphStore graphStore, T value, double weight) {
-        	super(value == null ? Integer.MAX_VALUE : value, graphStore);
+        public Vertex(Graph<T> graph, T value, double weight) {
+        	super(value == null ? Integer.MAX_VALUE : value, graph.getStore());
             this.weight = weight;
         }
 
@@ -434,8 +441,8 @@ public class Graph<T extends Comparable<T>> extends GraphModelImpl  implements C
         	
         }
         
-        public Edge(double cost, Vertex<T> from, Vertex<T> to) {
-        	this(id(from, to), from.getGraphStore(), from, to, 0, (double)cost, true);
+        public Edge(Graph<T> graph, double cost, Vertex<T> from, Vertex<T> to) {
+        	this(id(from, to), graph.getStore(), from, to, 0, (double)cost, true);
         }
 
         private static <T extends Comparable<T>> Object id(Vertex<T> from, Vertex<T> to) {
@@ -688,9 +695,12 @@ public class Graph<T extends Comparable<T>> extends GraphModelImpl  implements C
 		public String toString() {
 			final ToStringBuilder builder = new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
 					.append("Cost", this.getCost());
-			for (Edge<T> e : getPath())
+			for (Edge<T> e : getPath()){
 				builder.append(e);
+	        	builder.append("\n");
+			}
 			return builder.build();
 		}
     }
+
 }

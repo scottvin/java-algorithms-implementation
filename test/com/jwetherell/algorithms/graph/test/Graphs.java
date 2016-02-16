@@ -27,18 +27,21 @@ import com.jwetherell.algorithms.graph.Prim;
 import com.jwetherell.algorithms.graph.TopologicalSort;
 
 public class Graphs {
-
+	
     // Undirected
     private static class UndirectedGraph {
         final List<Vertex<Integer>> verticies = new ArrayList<Vertex<Integer>>();
-        final Graph.Vertex<Integer> v1 = new Graph.Vertex<Integer>(1);
-        final Graph.Vertex<Integer> v2 = new Graph.Vertex<Integer>(2);
-        final Graph.Vertex<Integer> v3 = new Graph.Vertex<Integer>(3);
-        final Graph.Vertex<Integer> v4 = new Graph.Vertex<Integer>(4);
-        final Graph.Vertex<Integer> v5 = new Graph.Vertex<Integer>(5);
-        final Graph.Vertex<Integer> v6 = new Graph.Vertex<Integer>(6);
-        final Graph.Vertex<Integer> v7 = new Graph.Vertex<Integer>(7);
-        final Graph.Vertex<Integer> v8 = new Graph.Vertex<Integer>(8);
+        final List<Edge<Integer>> edges = new ArrayList<Edge<Integer>>();
+        final Graph<Integer> graph = new Graph<Integer>(verticies, edges);
+        
+        final Graph.Vertex<Integer> v1 = new Graph.Vertex<Integer>(graph, 1);
+        final Graph.Vertex<Integer> v2 = new Graph.Vertex<Integer>(graph, 2);
+        final Graph.Vertex<Integer> v3 = new Graph.Vertex<Integer>(graph, 3);
+        final Graph.Vertex<Integer> v4 = new Graph.Vertex<Integer>(graph, 4);
+        final Graph.Vertex<Integer> v5 = new Graph.Vertex<Integer>(graph, 5);
+        final Graph.Vertex<Integer> v6 = new Graph.Vertex<Integer>(graph, 6);
+        final Graph.Vertex<Integer> v7 = new Graph.Vertex<Integer>(graph, 7);
+        final Graph.Vertex<Integer> v8 = new Graph.Vertex<Integer>(graph, 8);
         {
             verticies.add(v1);
             verticies.add(v2);
@@ -50,18 +53,19 @@ public class Graphs {
             verticies.add(v8);
         }
 
-        final List<Edge<Integer>> edges = new ArrayList<Edge<Integer>>();
-        final Graph.Edge<Integer> e1_2 = new Graph.Edge<Integer>(7, v1, v2);
-        final Graph.Edge<Integer> e1_3 = new Graph.Edge<Integer>(9, v1, v3);
-        final Graph.Edge<Integer> e1_6 = new Graph.Edge<Integer>(14, v1, v6);
-        final Graph.Edge<Integer> e2_3 = new Graph.Edge<Integer>(10, v2, v3);
-        final Graph.Edge<Integer> e2_4 = new Graph.Edge<Integer>(15, v2, v4);
-        final Graph.Edge<Integer> e3_4 = new Graph.Edge<Integer>(11, v3, v4);
-        final Graph.Edge<Integer> e3_6 = new Graph.Edge<Integer>(2, v3, v6);
-        final Graph.Edge<Integer> e5_6 = new Graph.Edge<Integer>(9, v5, v6);
-        final Graph.Edge<Integer> e4_5 = new Graph.Edge<Integer>(6, v4, v5);
-        final Graph.Edge<Integer> e1_7 = new Graph.Edge<Integer>(1, v1, v7);
-        final Graph.Edge<Integer> e1_8 = new Graph.Edge<Integer>(1, v1, v8);
+        final Graph.Edge<Integer> e1_2 = new Graph.Edge<Integer>(graph, 7, v1, v2);
+        final Graph.Edge<Integer> e1_3 = new Graph.Edge<Integer>(graph, 9, v1, v3);
+        final Graph.Edge<Integer> e1_6 = new Graph.Edge<Integer>(graph, 14, v1, v6);
+        final Graph.Edge<Integer> e2_3 = new Graph.Edge<Integer>(graph, 10, v2, v3);
+        final Graph.Edge<Integer> e2_4 = new Graph.Edge<Integer>(graph, 15, v2, v4);
+        final Graph.Edge<Integer> e3_4 = new Graph.Edge<Integer>(graph, 11, v3, v4);
+        final Graph.Edge<Integer> e3_6 = new Graph.Edge<Integer>(graph, 2, v3, v6);
+        final Graph.Edge<Integer> e5_6 = new Graph.Edge<Integer>(graph, 9, v5, v6);
+        final Graph.Edge<Integer> e4_5 = new Graph.Edge<Integer>(graph, 6, v4, v5);
+        final Graph.Edge<Integer> e1_7 = new Graph.Edge<Integer>(graph, 1, v1, v7);
+        final Graph.Edge<Integer> e1_8 = new Graph.Edge<Integer>(graph, 1, v1, v8);
+        final Graph.Edge<Integer> e6_5 = new Graph.Edge<Integer>(graph, 9, v6, v5);
+        final Graph.Edge<Integer> e5_4 = new Graph.Edge<Integer>(graph, 6, v5, v4);
         {
             edges.add(e1_2);
             edges.add(e1_3);
@@ -74,22 +78,26 @@ public class Graphs {
             edges.add(e4_5);
             edges.add(e1_7);
             edges.add(e1_8);
+            edges.add(e6_5);
+            edges.add(e5_4);
         }
-
-        final Graph<Integer> graph = new Graph<Integer>(verticies, edges);
+        
     }
 
     // Directed
     private static class DirectedGraph {
         final List<Vertex<Integer>> verticies = new ArrayList<Vertex<Integer>>();
-        final Graph.Vertex<Integer> v1 = new Graph.Vertex<Integer>(1);
-        final Graph.Vertex<Integer> v2 = new Graph.Vertex<Integer>(2);
-        final Graph.Vertex<Integer> v3 = new Graph.Vertex<Integer>(3);
-        final Graph.Vertex<Integer> v4 = new Graph.Vertex<Integer>(4);
-        final Graph.Vertex<Integer> v5 = new Graph.Vertex<Integer>(5);
-        final Graph.Vertex<Integer> v6 = new Graph.Vertex<Integer>(6);
-        final Graph.Vertex<Integer> v7 = new Graph.Vertex<Integer>(7);
-        final Graph.Vertex<Integer> v8 = new Graph.Vertex<Integer>(8);
+        final List<Edge<Integer>> edges = new ArrayList<Edge<Integer>>();
+        final Graph<Integer> graph = new Graph<Integer>(Graph.TYPE.DIRECTED, verticies, edges);
+        
+        final Graph.Vertex<Integer> v1 = new Graph.Vertex<Integer>(graph, 1);
+        final Graph.Vertex<Integer> v2 = new Graph.Vertex<Integer>(graph, 2);
+        final Graph.Vertex<Integer> v3 = new Graph.Vertex<Integer>(graph, 3);
+        final Graph.Vertex<Integer> v4 = new Graph.Vertex<Integer>(graph, 4);
+        final Graph.Vertex<Integer> v5 = new Graph.Vertex<Integer>(graph, 5);
+        final Graph.Vertex<Integer> v6 = new Graph.Vertex<Integer>(graph, 6);
+        final Graph.Vertex<Integer> v7 = new Graph.Vertex<Integer>(graph, 7);
+        final Graph.Vertex<Integer> v8 = new Graph.Vertex<Integer>(graph, 8);
         {
             verticies.add(v1);
             verticies.add(v2);
@@ -101,19 +109,18 @@ public class Graphs {
             verticies.add(v8);
         }
 
-        final List<Edge<Integer>> edges = new ArrayList<Edge<Integer>>();
-        final Graph.Edge<Integer> e1_2 = new Graph.Edge<Integer>(7, v1, v2);
-        final Graph.Edge<Integer> e1_3 = new Graph.Edge<Integer>(9, v1, v3);
-        final Graph.Edge<Integer> e1_6 = new Graph.Edge<Integer>(14, v1, v6);
-        final Graph.Edge<Integer> e2_3 = new Graph.Edge<Integer>(10, v2, v3);
-        final Graph.Edge<Integer> e2_4 = new Graph.Edge<Integer>(15, v2, v4);
-        final Graph.Edge<Integer> e3_4 = new Graph.Edge<Integer>(11, v3, v4);
-        final Graph.Edge<Integer> e3_6 = new Graph.Edge<Integer>(2, v3, v6);
-        final Graph.Edge<Integer> e6_5 = new Graph.Edge<Integer>(9, v6, v5);
-        final Graph.Edge<Integer> e6_8 = new Graph.Edge<Integer>(14, v6, v8);
-        final Graph.Edge<Integer> e4_5 = new Graph.Edge<Integer>(6, v4, v5);
-        final Graph.Edge<Integer> e4_7 = new Graph.Edge<Integer>(16, v4, v7);
-        final Graph.Edge<Integer> e1_8 = new Graph.Edge<Integer>(30, v1, v8);
+        final Graph.Edge<Integer> e1_2 = new Graph.Edge<Integer>(graph, 7, v1, v2);
+        final Graph.Edge<Integer> e1_3 = new Graph.Edge<Integer>(graph, 9, v1, v3);
+        final Graph.Edge<Integer> e1_6 = new Graph.Edge<Integer>(graph, 14, v1, v6);
+        final Graph.Edge<Integer> e2_3 = new Graph.Edge<Integer>(graph, 10, v2, v3);
+        final Graph.Edge<Integer> e2_4 = new Graph.Edge<Integer>(graph, 15, v2, v4);
+        final Graph.Edge<Integer> e3_4 = new Graph.Edge<Integer>(graph, 11, v3, v4);
+        final Graph.Edge<Integer> e3_6 = new Graph.Edge<Integer>(graph, 2, v3, v6);
+        final Graph.Edge<Integer> e6_5 = new Graph.Edge<Integer>(graph, 9, v6, v5);
+        final Graph.Edge<Integer> e6_8 = new Graph.Edge<Integer>(graph, 14, v6, v8);
+        final Graph.Edge<Integer> e4_5 = new Graph.Edge<Integer>(graph, 6, v4, v5);
+        final Graph.Edge<Integer> e4_7 = new Graph.Edge<Integer>(graph, 16, v4, v7);
+        final Graph.Edge<Integer> e1_8 = new Graph.Edge<Integer>(graph, 30, v1, v8);
         {
             edges.add(e1_2);
             edges.add(e1_3);
@@ -129,16 +136,18 @@ public class Graphs {
             edges.add(e1_8);
         }
 
-        final Graph<Integer> graph = new Graph<Integer>(Graph.TYPE.DIRECTED, verticies, edges);
     }
 
     // Directed with negative weights
     private static class DirectedWithNegativeWeights {
         final List<Vertex<Integer>> verticies = new ArrayList<Vertex<Integer>>();
-        final Graph.Vertex<Integer> v1 = new Graph.Vertex<Integer>(1);
-        final Graph.Vertex<Integer> v2 = new Graph.Vertex<Integer>(2);
-        final Graph.Vertex<Integer> v3 = new Graph.Vertex<Integer>(3);
-        final Graph.Vertex<Integer> v4 = new Graph.Vertex<Integer>(4);
+        final List<Edge<Integer>> edges = new ArrayList<Edge<Integer>>();
+        final Graph<Integer> graph = new Graph<Integer>(Graph.TYPE.DIRECTED, verticies, edges);
+        
+        final Graph.Vertex<Integer> v1 = new Graph.Vertex<Integer>(graph, 1);
+        final Graph.Vertex<Integer> v2 = new Graph.Vertex<Integer>(graph, 2);
+        final Graph.Vertex<Integer> v3 = new Graph.Vertex<Integer>(graph, 3);
+        final Graph.Vertex<Integer> v4 = new Graph.Vertex<Integer>(graph, 4);
         {
             verticies.add(v1);
             verticies.add(v2);
@@ -146,14 +155,13 @@ public class Graphs {
             verticies.add(v4);
         }
 
-        final List<Edge<Integer>> edges = new ArrayList<Edge<Integer>>();
-        final Graph.Edge<Integer> e1_4 = new Graph.Edge<Integer>(2, v1, v4);  // w->z
-        final Graph.Edge<Integer> e2_1 = new Graph.Edge<Integer>(6, v2, v1);  // x->w
-        final Graph.Edge<Integer> e2_3 = new Graph.Edge<Integer>(3, v2, v3);  // x->y
-        final Graph.Edge<Integer> e3_1 = new Graph.Edge<Integer>(4, v3, v1);  // y->w
-        final Graph.Edge<Integer> e3_4 = new Graph.Edge<Integer>(5, v3, v4);  // y->z
-        final Graph.Edge<Integer> e4_2 = new Graph.Edge<Integer>(-7, v4, v2); // z->x
-        final Graph.Edge<Integer> e4_3 = new Graph.Edge<Integer>(-3, v4, v3); // z->y
+        final Graph.Edge<Integer> e1_4 = new Graph.Edge<Integer>(graph, 2, v1, v4);  // w->z
+        final Graph.Edge<Integer> e2_1 = new Graph.Edge<Integer>(graph, 6, v2, v1);  // x->w
+        final Graph.Edge<Integer> e2_3 = new Graph.Edge<Integer>(graph, 3, v2, v3);  // x->y
+        final Graph.Edge<Integer> e3_1 = new Graph.Edge<Integer>(graph, 4, v3, v1);  // y->w
+        final Graph.Edge<Integer> e3_4 = new Graph.Edge<Integer>(graph, 5, v3, v4);  // y->z
+        final Graph.Edge<Integer> e4_2 = new Graph.Edge<Integer>(graph, -7, v4, v2); // z->x
+        final Graph.Edge<Integer> e4_3 = new Graph.Edge<Integer>(graph, -3, v4, v3); // z->y
         {
             edges.add(e1_4);
             edges.add(e2_1);
@@ -164,7 +172,6 @@ public class Graphs {
             edges.add(e4_3);
         }
 
-        final Graph<Integer> graph = new Graph<Integer>(Graph.TYPE.DIRECTED, verticies, edges);
     }
 
     // Ideal undirected path
@@ -183,7 +190,7 @@ public class Graphs {
             final List<Graph.Edge<Integer>> list = new ArrayList<Graph.Edge<Integer>>();
             list.add(undirected.e1_3);
             list.add(undirected.e3_6);
-            list.add(new Graph.Edge<Integer>(9, undirected.v6, undirected.v5));
+            list.add(undirected.e6_5);
             final Graph.CostPathPair<Integer> path = new Graph.CostPathPair<Integer>(cost, list);
             idealUndirectedPath.put(undirected.v5, path);
         }
@@ -238,7 +245,7 @@ public class Graphs {
         final List<Graph.Edge<Integer>> list = new ArrayList<Graph.Edge<Integer>>();
         list.add(undirected.e1_3);
         list.add(undirected.e3_6);
-        list.add(new Graph.Edge<Integer>(9, undirected.v6, undirected.v5));
+        list.add(undirected.e6_5);
         return (new Graph.CostPathPair<Integer>(cost, list));
     }
 
@@ -258,7 +265,7 @@ public class Graphs {
             final List<Graph.Edge<Integer>> list = new ArrayList<Graph.Edge<Integer>>();
             list.add(directed.e1_3);
             list.add(directed.e3_6);
-            list.add(new Graph.Edge<Integer>(9, directed.v6, directed.v5));
+            list.add(directed.e6_5);
             final Graph.CostPathPair<Integer> path = new Graph.CostPathPair<Integer>(cost, list);
             idealDirectedPath.put(directed.v5, path);
         }
@@ -317,7 +324,7 @@ public class Graphs {
         final List<Graph.Edge<Integer>> list = new ArrayList<Graph.Edge<Integer>>();
         list.add(directed.e1_3);
         list.add(directed.e3_6);
-        list.add(new Graph.Edge<Integer>(9, directed.v6, directed.v5));
+        list.add(directed.e6_5);
         return (new Graph.CostPathPair<Integer>(cost, list));
     }
 
@@ -373,7 +380,7 @@ public class Graphs {
         final Graph.Vertex<Integer> start = undirected.v1;
         final Graph.Vertex<Integer> end = undirected.v5;
         {   // UNDIRECTED GRAPH
-            final Map<Graph.Vertex<Integer>, Graph.CostPathPair<Integer>> map1 = new Dijkstra<Integer>().getShortestPaths(undirected.graph, start);
+            final Map<Graph.Vertex<Integer>, Graph.CostPathPair<Integer>> map1 = new Dijkstra<Integer>().getShortestPaths(undirected.graph.populate(), start);
 
             // Compare results
             for (Graph.Vertex<Integer> v : map1.keySet()) {
@@ -382,7 +389,7 @@ public class Graphs {
                 assertTrue("Dijstra's shortest path error. path1="+path1+" path2="+path2, path1.equals(path2));
             }
 
-            final Graph.CostPathPair<Integer> pair1 = new Dijkstra<Integer>().getShortestPath(undirected.graph, start, end);
+            final Graph.CostPathPair<Integer> pair1 = new Dijkstra<Integer>().getShortestPath(undirected.graph.populate(), start, end);
             assertTrue("No path from " + start.getValue() + " to " + end.getValue(), (pair1 != null));
 
             assertTrue("Dijstra's shortest path error. pair="+pair1+" pair="+getIdealUndirectedPathPair(undirected), pair1.equals(getIdealUndirectedPathPair(undirected)));
@@ -395,7 +402,7 @@ public class Graphs {
         final Graph.Vertex<Integer> start = undirected.v1;
         final Graph.Vertex<Integer> end = undirected.v5;
         {
-            final Map<Graph.Vertex<Integer>, Graph.CostPathPair<Integer>> map2 = new BellmanFord<Integer>().getShortestPaths(undirected.graph, start);
+            final Map<Graph.Vertex<Integer>, Graph.CostPathPair<Integer>> map2 = new BellmanFord<Integer>().getShortestPaths(undirected.graph.populate(), start);
 
             // Compare results
             for (Graph.Vertex<Integer> v : map2.keySet()) {
@@ -404,7 +411,7 @@ public class Graphs {
                 assertTrue("Bellman-Ford's shortest path error. path1="+path1+" path2="+path2, path1.equals(path2));
             }
 
-            final Graph.CostPathPair<Integer> pair2 = new BellmanFord<Integer>().getShortestPath(undirected.graph, start, end);
+            final Graph.CostPathPair<Integer> pair2 = new BellmanFord<Integer>().getShortestPath(undirected.graph.populate(), start, end);
             assertTrue("Bellman-Ford's shortest path error. pair="+pair2+" result="+getIdealUndirectedPathPair(undirected), pair2.equals(getIdealUndirectedPathPair(undirected)));
         }
     }
@@ -415,7 +422,7 @@ public class Graphs {
 
         Graph.Vertex<Integer> start = undirected.v1;
         {
-            final Graph.CostPathPair<Integer> resultMST = new Prim<Integer>().getMinimumSpanningTree(undirected.graph, start);
+            final Graph.CostPathPair<Integer> resultMST = new Prim<Integer>().getMinimumSpanningTree(undirected.graph.populate(), start);
             {
                 // Ideal MST
                 final int cost = 35;
@@ -425,48 +432,48 @@ public class Graphs {
                 list.add(undirected.e1_2);
                 list.add(undirected.e1_3);
                 list.add(undirected.e3_6);
-                list.add(new Graph.Edge<Integer>(9, undirected.v6, undirected.v5));
-                list.add(new Graph.Edge<Integer>(6, undirected.v5, undirected.v4));
+                list.add(undirected.e6_5);
+                list.add(undirected.e5_4);
                 final Graph.CostPathPair<Integer> idealMST = new Graph.CostPathPair<Integer>(cost, list);
     
                 assertTrue("Prim's minimum spanning tree error. resultMST="+resultMST+" idealMST="+idealMST, resultMST.equals(idealMST));
             }
 
-            // Prim on a graph with cycles
             final List<Vertex<Integer>> cyclicVerticies = new ArrayList<Vertex<Integer>>();
-            final Graph.Vertex<Integer> cv1 = new Graph.Vertex<Integer>(1);
+            final List<Edge<Integer>> cyclicEdges = new ArrayList<Edge<Integer>>();
+            final Graph<Integer> cyclicUndirected = new Graph<Integer>(TYPE.UNDIRECTED, cyclicVerticies, cyclicEdges);
+            
+            // Prim on a graph with cycles
+            final Graph.Vertex<Integer> cv1 = new Graph.Vertex<Integer>(cyclicUndirected, 1);
             cyclicVerticies.add(cv1);
-            final Graph.Vertex<Integer> cv2 = new Graph.Vertex<Integer>(2);
+            final Graph.Vertex<Integer> cv2 = new Graph.Vertex<Integer>(cyclicUndirected, 2);
             cyclicVerticies.add(cv2);
-            final Graph.Vertex<Integer> cv3 = new Graph.Vertex<Integer>(3);
+            final Graph.Vertex<Integer> cv3 = new Graph.Vertex<Integer>(cyclicUndirected, 3);
             cyclicVerticies.add(cv3);
-            final Graph.Vertex<Integer> cv4 = new Graph.Vertex<Integer>(4);
+            final Graph.Vertex<Integer> cv4 = new Graph.Vertex<Integer>(cyclicUndirected, 4);
             cyclicVerticies.add(cv4);
-            final Graph.Vertex<Integer> cv5 = new Graph.Vertex<Integer>(5);
+            final Graph.Vertex<Integer> cv5 = new Graph.Vertex<Integer>(cyclicUndirected, 5);
             cyclicVerticies.add(cv5);
 
-            final List<Edge<Integer>> cyclicEdges = new ArrayList<Edge<Integer>>();
-            final Graph.Edge<Integer> ce1_2 = new Graph.Edge<Integer>(3, cv1, cv2);
+            final Graph.Edge<Integer> ce1_2 = new Graph.Edge<Integer>(cyclicUndirected, 3, cv1, cv2);
             cyclicEdges.add(ce1_2);
-            final Graph.Edge<Integer> ce2_3 = new Graph.Edge<Integer>(2, cv2, cv3);
+            final Graph.Edge<Integer> ce2_3 = new Graph.Edge<Integer>(cyclicUndirected, 2, cv2, cv3);
             cyclicEdges.add(ce2_3);
-            final Graph.Edge<Integer> ce3_4 = new Graph.Edge<Integer>(4, cv3, cv4);
+            final Graph.Edge<Integer> ce3_4 = new Graph.Edge<Integer>(cyclicUndirected, 4, cv3, cv4);
             cyclicEdges.add(ce3_4);
-            final Graph.Edge<Integer> ce4_1 = new Graph.Edge<Integer>(1, cv4, cv1);
+            final Graph.Edge<Integer> ce4_1 = new Graph.Edge<Integer>(cyclicUndirected, 1, cv4, cv1);
             cyclicEdges.add(ce4_1);
-            final Graph.Edge<Integer> ce4_5 = new Graph.Edge<Integer>(1, cv4, cv5);
+            final Graph.Edge<Integer> ce4_5 = new Graph.Edge<Integer>(cyclicUndirected, 1, cv4, cv5);
             cyclicEdges.add(ce4_5);
-
-            final Graph<Integer> cyclicUndirected = new Graph<Integer>(TYPE.UNDIRECTED, cyclicVerticies, cyclicEdges);
-
+            
             start = cv1;
 
-            final Graph.CostPathPair<Integer> pair4 = new Prim<Integer>().getMinimumSpanningTree(cyclicUndirected, start);
+            final Graph.CostPathPair<Integer> pair4 = new Prim<Integer>().getMinimumSpanningTree(cyclicUndirected.populate(), start);
             {
                 // Ideal MST
                 final int cost = 7;
                 final List<Graph.Edge<Integer>> list = new ArrayList<Graph.Edge<Integer>>();
-                list.add(new Graph.Edge<Integer>(1, cv1, cv4));
+                list.add(ce4_1);
                 list.add(ce4_5);
                 list.add(ce1_2);
                 list.add(ce2_3);
@@ -482,7 +489,7 @@ public class Graphs {
         final DirectedGraph directed = new DirectedGraph();
         final Graph.Vertex<Integer> start = directed.v1;
         final Graph.Vertex<Integer> end = directed.v5;
-        final Map<Graph.Vertex<Integer>, Graph.CostPathPair<Integer>> map1 = new Dijkstra<Integer>().getShortestPaths(directed.graph, start);
+        final Map<Graph.Vertex<Integer>, Graph.CostPathPair<Integer>> map1 = new Dijkstra<Integer>().getShortestPaths(directed.graph.populate(), start);
 
         // Compare results
         for (Graph.Vertex<Integer> v : map1.keySet()) {
@@ -491,7 +498,7 @@ public class Graphs {
             assertTrue("Dijstra's shortest path error. path1="+path1+" path2="+path2, path1.equals(path2));
         }
 
-        final Graph.CostPathPair<Integer> pair1 = new Dijkstra<Integer>().getShortestPath(directed.graph, start, end);
+        final Graph.CostPathPair<Integer> pair1 = new Dijkstra<Integer>().getShortestPath(directed.graph.populate(), start, end);
         assertTrue("No path from "+start.getValue()+" to "+end.getValue(), (pair1!=null));
 
         // Compare pair
@@ -504,7 +511,7 @@ public class Graphs {
         final Graph.Vertex<Integer> start = directed.v1;
         final Graph.Vertex<Integer> end = directed.v5;
 
-        final Map<Graph.Vertex<Integer>, Graph.CostPathPair<Integer>> map2 = new BellmanFord<Integer>().getShortestPaths(directed.graph, start);
+        final Map<Graph.Vertex<Integer>, Graph.CostPathPair<Integer>> map2 = new BellmanFord<Integer>().getShortestPaths(directed.graph.populate(), start);
 
         // Compare results
         for (Graph.Vertex<Integer> v : map2.keySet()) {
@@ -513,7 +520,7 @@ public class Graphs {
             assertTrue("Bellman-Ford's shortest path error. path1="+path1+" path2="+path2, path1.equals(path2));
         }
 
-        final Graph.CostPathPair<Integer> pair2 = new BellmanFord<Integer>().getShortestPath(directed.graph, start, end);
+        final Graph.CostPathPair<Integer> pair2 = new BellmanFord<Integer>().getShortestPath(directed.graph.populate(), start, end);
         assertTrue("No path from "+start.getValue()+" to "+end.getValue(), pair2!=null);
 
         // Compare pair
@@ -526,7 +533,7 @@ public class Graphs {
         {   // DIRECTED GRAPH (WITH NEGATIVE WEIGHTS)
             final Graph.Vertex<Integer> start = directedWithNegWeights.v1;
             final Graph.Vertex<Integer> end = directedWithNegWeights.v3;
-            final Map<Graph.Vertex<Integer>, Graph.CostPathPair<Integer>> map1 = new BellmanFord<Integer>().getShortestPaths(directedWithNegWeights.graph, start);
+            final Map<Graph.Vertex<Integer>, Graph.CostPathPair<Integer>> map1 = new BellmanFord<Integer>().getShortestPaths(directedWithNegWeights.graph.populate(), start);
 
             // Compare results
             for (Graph.Vertex<Integer> v : map1.keySet()) {
@@ -535,7 +542,7 @@ public class Graphs {
                 assertTrue("Bellman-Ford's shortest path error. path1="+path1+" path2="+path2, path1.equals(path2));
             }
 
-            final Graph.CostPathPair<Integer> pair1 = new BellmanFord<Integer>().getShortestPath(directedWithNegWeights.graph, start, end);
+            final Graph.CostPathPair<Integer> pair1 = new BellmanFord<Integer>().getShortestPath(directedWithNegWeights.graph.populate(), start, end);
             assertTrue("No path from " + start.getValue() + " to " + end.getValue(), pair1 != null);
 
             // Compare pair
@@ -547,7 +554,7 @@ public class Graphs {
     public void testJohnonsonsAllPairsShortestPathOnDirecteWithNegWeights() {
         final DirectedWithNegativeWeights directedWithNegWeights = new DirectedWithNegativeWeights();
         {
-            final Map<Vertex<Integer>, Map<Vertex<Integer>, List<Edge<Integer>>>> path = new Johnson<Integer>().getAllPairsShortestPaths(directedWithNegWeights.graph);
+            final Map<Vertex<Integer>, Map<Vertex<Integer>, List<Edge<Integer>>>> path = new Johnson<Integer>().getAllPairsShortestPaths(directedWithNegWeights.graph.populate());
             assertTrue("Directed graph contains a negative weight cycle.", (path != null));
 
             final Map<Vertex<Integer>, Map<Vertex<Integer>, List<Edge<Integer>>>> result = new HashMap<Vertex<Integer>, Map<Vertex<Integer>, List<Edge<Integer>>>>();
@@ -649,7 +656,7 @@ public class Graphs {
     public void testFloydWarshallonDirectedWithNegWeights() {
         final DirectedWithNegativeWeights directedWithNegWeights = new DirectedWithNegativeWeights();
         {
-            final Map<Vertex<Integer>, Map<Vertex<Integer>, Double>> pathWeights = new FloydWarshall<Integer>().getAllPairsShortestPaths(directedWithNegWeights.graph);  
+            final Map<Vertex<Integer>, Map<Vertex<Integer>, Double>> pathWeights = new FloydWarshall<Integer>().getAllPairsShortestPaths(directedWithNegWeights.graph.populate());  
             final Map<Vertex<Integer>, Map<Vertex<Integer>, Double>> result = new HashMap<Vertex<Integer>, Map<Vertex<Integer>, Double>>();
             {
                 // Ideal weights
@@ -728,66 +735,69 @@ public class Graphs {
     @Test
     public void cycleCheckOnUndirected() {
         final List<Vertex<Integer>> cycledVerticies = new ArrayList<Vertex<Integer>>();
+        final List<Edge<Integer>> cycledEdges = new ArrayList<Edge<Integer>>();
+        final Graph<Integer> undirectedWithCycle = new Graph<Integer>(cycledVerticies, cycledEdges);
         {   // UNDIRECTED GRAPH
-            final Graph.Vertex<Integer> cv1 = new Graph.Vertex<Integer>(1);
+            final Graph.Vertex<Integer> cv1 = new Graph.Vertex<Integer>(undirectedWithCycle, 1);
             cycledVerticies.add(cv1);
-            final Graph.Vertex<Integer> cv2 = new Graph.Vertex<Integer>(2);
+            final Graph.Vertex<Integer> cv2 = new Graph.Vertex<Integer>(undirectedWithCycle, 2);
             cycledVerticies.add(cv2);
-            final Graph.Vertex<Integer> cv3 = new Graph.Vertex<Integer>(3);
+            final Graph.Vertex<Integer> cv3 = new Graph.Vertex<Integer>(undirectedWithCycle, 3);
             cycledVerticies.add(cv3);
-            final Graph.Vertex<Integer> cv4 = new Graph.Vertex<Integer>(4);
+            final Graph.Vertex<Integer> cv4 = new Graph.Vertex<Integer>(undirectedWithCycle, 4);
             cycledVerticies.add(cv4);
-            final Graph.Vertex<Integer> cv5 = new Graph.Vertex<Integer>(5);
+            final Graph.Vertex<Integer> cv5 = new Graph.Vertex<Integer>(undirectedWithCycle, 5);
             cycledVerticies.add(cv5);
-            final Graph.Vertex<Integer> cv6 = new Graph.Vertex<Integer>(6);
+            final Graph.Vertex<Integer> cv6 = new Graph.Vertex<Integer>(undirectedWithCycle, 6);
             cycledVerticies.add(cv6);
 
-            final List<Edge<Integer>> cycledEdges = new ArrayList<Edge<Integer>>();
-            final Graph.Edge<Integer> ce1_2 = new Graph.Edge<Integer>(7, cv1, cv2);
+            final Graph.Edge<Integer> ce1_2 = new Graph.Edge<Integer>(undirectedWithCycle, 7, cv1, cv2);
             cycledEdges.add(ce1_2);
-            final Graph.Edge<Integer> ce2_4 = new Graph.Edge<Integer>(15, cv2, cv4);
+            final Graph.Edge<Integer> ce2_4 = new Graph.Edge<Integer>(undirectedWithCycle, 15, cv2, cv4);
             cycledEdges.add(ce2_4);
-            final Graph.Edge<Integer> ce3_4 = new Graph.Edge<Integer>(11, cv3, cv4);
+            final Graph.Edge<Integer> ce3_4 = new Graph.Edge<Integer>(undirectedWithCycle, 11, cv3, cv4);
             cycledEdges.add(ce3_4);
-            final Graph.Edge<Integer> ce3_6 = new Graph.Edge<Integer>(2, cv3, cv6);
+            final Graph.Edge<Integer> ce3_6 = new Graph.Edge<Integer>(undirectedWithCycle, 2, cv3, cv6);
             cycledEdges.add(ce3_6);
-            final Graph.Edge<Integer> ce5_6 = new Graph.Edge<Integer>(9, cv5, cv6);
+            final Graph.Edge<Integer> ce5_6 = new Graph.Edge<Integer>(undirectedWithCycle, 9, cv5, cv6);
             cycledEdges.add(ce5_6);
-            final Graph.Edge<Integer> ce4_5 = new Graph.Edge<Integer>(6, cv4, cv5);
+            final Graph.Edge<Integer> ce4_5 = new Graph.Edge<Integer>(undirectedWithCycle, 6, cv4, cv5);
             cycledEdges.add(ce4_5);
 
-            final Graph<Integer> undirectedWithCycle = new Graph<Integer>(cycledVerticies, cycledEdges);
+            undirectedWithCycle.populate();
 
             boolean result = new CycleDetection<Integer>().detect(undirectedWithCycle);
             assertTrue("Cycle detection error.", result);
 
             final List<Vertex<Integer>> verticies = new ArrayList<Vertex<Integer>>();
-            final Graph.Vertex<Integer> v1 = new Graph.Vertex<Integer>(1);
+            final List<Edge<Integer>> edges = new ArrayList<Edge<Integer>>();
+            final Graph<Integer> undirectedWithoutCycle = new Graph<Integer>(verticies, edges);
+            
+            final Graph.Vertex<Integer> v1 = new Graph.Vertex<Integer>(undirectedWithoutCycle, 1);
             verticies.add(v1);
-            final Graph.Vertex<Integer> v2 = new Graph.Vertex<Integer>(2);
+            final Graph.Vertex<Integer> v2 = new Graph.Vertex<Integer>(undirectedWithoutCycle, 2);
             verticies.add(v2);
-            final Graph.Vertex<Integer> v3 = new Graph.Vertex<Integer>(3);
+            final Graph.Vertex<Integer> v3 = new Graph.Vertex<Integer>(undirectedWithoutCycle, 3);
             verticies.add(v3);
-            final Graph.Vertex<Integer> v4 = new Graph.Vertex<Integer>(4);
+            final Graph.Vertex<Integer> v4 = new Graph.Vertex<Integer>(undirectedWithoutCycle, 4);
             verticies.add(v4);
-            final Graph.Vertex<Integer> v5 = new Graph.Vertex<Integer>(5);
+            final Graph.Vertex<Integer> v5 = new Graph.Vertex<Integer>(undirectedWithoutCycle, 5);
             verticies.add(v5);
-            final Graph.Vertex<Integer> v6 = new Graph.Vertex<Integer>(6);
+            final Graph.Vertex<Integer> v6 = new Graph.Vertex<Integer>(undirectedWithoutCycle, 6);
             verticies.add(v6);
 
-            final List<Edge<Integer>> edges = new ArrayList<Edge<Integer>>();
-            final Graph.Edge<Integer> e1_2 = new Graph.Edge<Integer>(7, v1, v2);
+            final Graph.Edge<Integer> e1_2 = new Graph.Edge<Integer>(undirectedWithoutCycle, 7, v1, v2);
             edges.add(e1_2);
-            final Graph.Edge<Integer> e2_4 = new Graph.Edge<Integer>(15, v2, v4);
+            final Graph.Edge<Integer> e2_4 = new Graph.Edge<Integer>(undirectedWithoutCycle, 15, v2, v4);
             edges.add(e2_4);
-            final Graph.Edge<Integer> e3_4 = new Graph.Edge<Integer>(11, v3, v4);
+            final Graph.Edge<Integer> e3_4 = new Graph.Edge<Integer>(undirectedWithoutCycle, 11, v3, v4);
             edges.add(e3_4);
-            final Graph.Edge<Integer> e3_6 = new Graph.Edge<Integer>(2, v3, v6);
+            final Graph.Edge<Integer> e3_6 = new Graph.Edge<Integer>(undirectedWithoutCycle, 2, v3, v6);
             edges.add(e3_6);
-            final Graph.Edge<Integer> e4_5 = new Graph.Edge<Integer>(6, v4, v5);
+            final Graph.Edge<Integer> e4_5 = new Graph.Edge<Integer>(undirectedWithoutCycle, 6, v4, v5);
             edges.add(e4_5);
-
-            final Graph<Integer> undirectedWithoutCycle = new Graph<Integer>(verticies, edges);
+            
+            undirectedWithoutCycle.populate();
 
             result = new CycleDetection<Integer>().detect(undirectedWithoutCycle);
             assertFalse("Cycle detection error.", result);
@@ -798,36 +808,36 @@ public class Graphs {
     public void topologicalSortOnDirectedGraph() {
         {   // DIRECTED GRAPH
             final List<Vertex<Integer>> verticies = new ArrayList<Vertex<Integer>>();
-            final Graph.Vertex<Integer> cv1 = new Graph.Vertex<Integer>(1);
+            final List<Edge<Integer>> edges = new ArrayList<Edge<Integer>>();
+            final Graph<Integer> digraph = new Graph<Integer>(Graph.TYPE.DIRECTED, verticies, edges);
+            
+            final Graph.Vertex<Integer> cv1 = new Graph.Vertex<Integer>(digraph, 1);
             verticies.add(cv1);
-            final Graph.Vertex<Integer> cv2 = new Graph.Vertex<Integer>(2);
+            final Graph.Vertex<Integer> cv2 = new Graph.Vertex<Integer>(digraph, 2);
             verticies.add(cv2);
-            final Graph.Vertex<Integer> cv3 = new Graph.Vertex<Integer>(3);
+            final Graph.Vertex<Integer> cv3 = new Graph.Vertex<Integer>(digraph, 3);
             verticies.add(cv3);
-            final Graph.Vertex<Integer> cv4 = new Graph.Vertex<Integer>(4);
+            final Graph.Vertex<Integer> cv4 = new Graph.Vertex<Integer>(digraph, 4);
             verticies.add(cv4);
-            final Graph.Vertex<Integer> cv5 = new Graph.Vertex<Integer>(5);
+            final Graph.Vertex<Integer> cv5 = new Graph.Vertex<Integer>(digraph, 5);
             verticies.add(cv5);
-            final Graph.Vertex<Integer> cv6 = new Graph.Vertex<Integer>(6);
+            final Graph.Vertex<Integer> cv6 = new Graph.Vertex<Integer>(digraph, 6);
             verticies.add(cv6);
 
-            final List<Edge<Integer>> edges = new ArrayList<Edge<Integer>>();
-            final Graph.Edge<Integer> ce1_2 = new Graph.Edge<Integer>(1, cv1, cv2);
+            final Graph.Edge<Integer> ce1_2 = new Graph.Edge<Integer>(digraph, 1, cv1, cv2);
             edges.add(ce1_2);
-            final Graph.Edge<Integer> ce2_4 = new Graph.Edge<Integer>(2, cv2, cv4);
+            final Graph.Edge<Integer> ce2_4 = new Graph.Edge<Integer>(digraph, 2, cv2, cv4);
             edges.add(ce2_4);
-            final Graph.Edge<Integer> ce4_3 = new Graph.Edge<Integer>(3, cv4, cv3);
+            final Graph.Edge<Integer> ce4_3 = new Graph.Edge<Integer>(digraph, 3, cv4, cv3);
             edges.add(ce4_3);
-            final Graph.Edge<Integer> ce3_6 = new Graph.Edge<Integer>(4, cv3, cv6);
+            final Graph.Edge<Integer> ce3_6 = new Graph.Edge<Integer>(digraph, 4, cv3, cv6);
             edges.add(ce3_6);
-            final Graph.Edge<Integer> ce5_6 = new Graph.Edge<Integer>(5, cv5, cv6);
+            final Graph.Edge<Integer> ce5_6 = new Graph.Edge<Integer>(digraph, 5, cv5, cv6);
             edges.add(ce5_6);
-            final Graph.Edge<Integer> ce4_5 = new Graph.Edge<Integer>(6, cv4, cv5);
+            final Graph.Edge<Integer> ce4_5 = new Graph.Edge<Integer>(digraph, 6, cv4, cv5);
             edges.add(ce4_5);
 
-            final Graph<Integer> digraph = new Graph<Integer>(Graph.TYPE.DIRECTED, verticies, edges);
-
-            final List<Graph.Vertex<Integer>> results1 = new TopologicalSort<Integer>().sort(digraph);
+            final List<Graph.Vertex<Integer>> results1 = new TopologicalSort<Integer>().sort(digraph.populate());
             assertTrue("Topological sort error. results="+results1, results1.size()!=0);
 
             final List<Graph.Vertex<Integer>> results2 = new ArrayList<Graph.Vertex<Integer>>(results1.size());
@@ -910,7 +920,7 @@ public class Graphs {
         final Graph.Vertex<Integer> end = undirected.v8;
         {   // UNDIRECTED GRAPH
             final AStar<Integer> aStar = new AStar<Integer>();
-            final List<Graph.Edge<Integer>> path = aStar.aStar(undirected.graph, start, end);
+			final List<Graph.Edge<Integer>> path = aStar.aStar(undirected.graph.populate(), start, end);
             final List<Graph.Edge<Integer>> ideal = getIdealUndirectedPath(undirected).get(end).getPath();
             assertTrue("A* path error. path="+path+" idealPathPair="+ideal, path.equals(ideal));
         }
@@ -923,7 +933,7 @@ public class Graphs {
         final Graph.Vertex<Integer> end = directed.v8;
         {   // DIRECTED GRAPH
             final AStar<Integer> aStar = new AStar<Integer>();
-            final List<Graph.Edge<Integer>> path = aStar.aStar(directed.graph, start, end);
+            final List<Graph.Edge<Integer>> path = aStar.aStar(directed.graph.populate(), start, end);
             final List<Graph.Edge<Integer>> ideal = getIdealDirectedPath(directed).get(end).getPath();
             assertTrue("A* path error. path="+path+" idealPathPair="+ideal, path.equals(ideal));
         }
@@ -937,7 +947,7 @@ public class Graphs {
         final Graph<Integer> g = new Graph<Integer>(TYPE.DIRECTED);
         for (int i=0; i<values.length; i++){
         	if(!g.hasVertex(values[i]))
-        		g.addVertex(new Vertex<Integer>(values[i], 0));
+        		g.addVertex(new Vertex<Integer>(g, values[i], 0.0));
         }
 
         for (int i=0; i<values.length; i++) {
@@ -946,7 +956,7 @@ public class Graphs {
                 final Vertex<Integer> vj = g.getVertex(values[j]);
                 final int diff = Math.abs(vi.getValue() - vj.getValue());
                 if (diff >= K) {
-                    final Edge<Integer> eij = new Edge<Integer>(diff, vi, vj);
+                    final Edge<Integer> eij = new Edge<Integer>(g, diff, vi, vj);
                     g.addEdge(eij);
                     vi.addEdge(eij);
                 }

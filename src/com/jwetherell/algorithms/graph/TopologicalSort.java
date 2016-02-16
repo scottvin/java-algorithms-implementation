@@ -32,7 +32,7 @@ public class TopologicalSort<T extends Comparable<T>> {
             throw new IllegalArgumentException("Cannot perform a topological sort on a non-directed graph. graph type = "+graph.getType());
 
         // clone to prevent changes the graph parameter's state
-        final Graph<T> clone = Graph.copyGraph(graph);
+        final Graph<T> clone = /*Graph.copyGraph*/(graph);
         final List<Graph.Vertex<T>> sorted = new ArrayList<Graph.Vertex<T>>();
         final List<Graph.Vertex<T>> noOutgoing = new ArrayList<Graph.Vertex<T>>();
 

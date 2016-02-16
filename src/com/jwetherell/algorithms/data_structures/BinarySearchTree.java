@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 import java.util.Queue;
+import java.util.Random;
 import java.util.Set;
 
 import com.jwetherell.algorithms.data_structures.interfaces.ITree;

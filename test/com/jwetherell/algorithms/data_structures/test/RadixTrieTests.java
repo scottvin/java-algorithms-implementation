@@ -1,7 +1,6 @@
 package com.jwetherell.algorithms.data_structures.test;
 
 import static org.junit.Assert.assertTrue;
-import junit.framework.Assert;
 
 import org.junit.Test;
 
@@ -10,6 +9,8 @@ import com.jwetherell.algorithms.data_structures.test.common.JavaMapTest;
 import com.jwetherell.algorithms.data_structures.test.common.MapTest;
 import com.jwetherell.algorithms.data_structures.test.common.Utils;
 import com.jwetherell.algorithms.data_structures.test.common.Utils.TestData;
+
+import junit.framework.Assert;
 
 public class RadixTrieTests {
 

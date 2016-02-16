@@ -28,7 +28,7 @@ public class Prim<T extends Comparable<T>> {
         if (graph.getType() == Graph.TYPE.DIRECTED) 
             throw (new IllegalArgumentException("Undirected graphs only."));
 
-        int cost = 0;
+        double cost = 0;
 
         final Set<Graph.Vertex<T>> unvisited = new HashSet<Graph.Vertex<T>>();
         unvisited.addAll(graph.getAllVertices());

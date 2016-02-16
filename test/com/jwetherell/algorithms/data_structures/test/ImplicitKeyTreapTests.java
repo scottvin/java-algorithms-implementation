@@ -4,8 +4,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Collection;
 
-import junit.framework.Assert;
-
 import org.junit.Test;
 
 import com.jwetherell.algorithms.data_structures.ImplicitKeyTreap;
@@ -15,6 +13,8 @@ import com.jwetherell.algorithms.data_structures.test.common.JavaCollectionTest;
 import com.jwetherell.algorithms.data_structures.test.common.ListTest;
 import com.jwetherell.algorithms.data_structures.test.common.Utils;
 import com.jwetherell.algorithms.data_structures.test.common.Utils.TestData;
+
+import junit.framework.Assert;
 
 public class ImplicitKeyTreapTests {
 

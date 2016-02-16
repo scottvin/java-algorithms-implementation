@@ -12,22 +12,24 @@ import com.jwetherell.algorithms.data_structures.Graph;
  * @author Justin Wetherell <phishman3579@gmail.com>
  */
 public class CycleDetection<T extends Comparable<T>> {
-
+	private Graph<T> graph;
+	
 	public CycleDetection() { }
 
     /**
      * Cycle detection on a unidrected graph.
      * 
-     * @param graph Graph
+     * @param g Graph
      * @return true if a cycle exists
      */
-    public boolean detect(Graph<T> graph) {
-        if (graph == null)
+    public boolean detect(Graph<T> g) {
+        if (g == null)
             throw new IllegalArgumentException("Graph is NULL.");
 
-        if (graph.getType() != Graph.TYPE.UNDIRECTED)
+        if (g.getType() != Graph.TYPE.UNDIRECTED)
             throw new IllegalArgumentException("Graph is needs to be Undirected.");
-
+        
+        this.graph = g;
         final Set<Graph.Vertex<T>> visitedVerticies = new HashSet<Graph.Vertex<T>>();
         final Set<Graph.Edge<T>> visitedEdges = new HashSet<Graph.Edge<T>>();
 
@@ -54,7 +56,7 @@ public class CycleDetection<T extends Comparable<T>> {
                     if (to != null && !visitedEdges.contains(edge)) {
                         visitedEdges.add(edge);
 
-                        final Graph.Edge<T> recip = new Graph.Edge<T>(edge.getCost(), edge.getToVertex(), edge.getFromVertex());
+                        final Graph.Edge<T> recip = new Graph.Edge<T>(graph, edge.getCost(), edge.getToVertex(), edge.getFromVertex());
                         visitedEdges.add(recip);
 
                         result = depthFirstSearch(to, visitedVerticies, visitedEdges);

@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
-import junit.framework.Assert;
-
 import com.jwetherell.algorithms.data_structures.KdTree;
 import com.jwetherell.algorithms.data_structures.QuadTree;
+
+import junit.framework.Assert;
 
 public class SpatialDataStructuresTiming {
 

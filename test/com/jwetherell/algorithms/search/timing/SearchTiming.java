@@ -3,8 +3,8 @@ package com.jwetherell.algorithms.search.timing;
 import java.text.DecimalFormat;
 
 import com.jwetherell.algorithms.search.BinarySearch;
-import com.jwetherell.algorithms.search.LinearSearch;
 import com.jwetherell.algorithms.search.InterpolationSearch;
+import com.jwetherell.algorithms.search.LinearSearch;
 import com.jwetherell.algorithms.search.QuickSelect;
 
 public class SearchTiming {
